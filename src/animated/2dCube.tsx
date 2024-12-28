@@ -7,6 +7,18 @@ const RubiksCube2D: React.FC = () => {
     // Ability to use matrix in parent 'shared layout'
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
 
+    const convertToRubikSolverString = (rubiksCubeMatrix: { [key: string]: string[][] }): string => {
+        const faceOrder = ['top', 'left', 'front', 'right', 'back', 'bottom'];
+
+        // Iterate through the face order and concatenate the rows
+        let result = '';
+        faceOrder.forEach(face => {
+            result += rubiksCubeMatrix[face].flat().join('');
+        });
+
+        return result;
+    };
+
     const rotateFaceCounterclockwise = (matrix: string[][]): string[][] => {
         const rotated = matrix[0].map((_, index) =>
             matrix.map(row => row[index]).reverse()
@@ -184,16 +196,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'q': // Reset the matrix
-                setRubiksCube({
-                    front: Array(3).fill(null).map(() => Array(3).fill('white')),
-                    back: Array(3).fill(null).map(() => Array(3).fill('yellow')),
-                    left: Array(3).fill(null).map(() => Array(3).fill('green')),
-                    right: Array(3).fill(null).map(() => Array(3).fill('blue')),
-                    top: Array(3).fill(null).map(() => Array(3).fill('red')),
-                    bottom: Array(3).fill(null).map(() => Array(3).fill('orange')),
-                });
-                break;
+            // Up face (Y=1)
             case 'u': // Up clockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
@@ -271,6 +274,23 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
+
+
+
+            // Add cases for top (`u`, `i`) and bottom (`d`, `c`)...
+
+            case 'q': // Reset the matrix
+                setRubiksCube({
+                    front: Array(3).fill(null).map(() => Array(3).fill('white')),
+                    back: Array(3).fill(null).map(() => Array(3).fill('yellow')),
+                    left: Array(3).fill(null).map(() => Array(3).fill('green')),
+                    right: Array(3).fill(null).map(() => Array(3).fill('blue')),
+                    top: Array(3).fill(null).map(() => Array(3).fill('red')),
+                    bottom: Array(3).fill(null).map(() => Array(3).fill('orange')),
+                });
+                break;
+
+
             case 's': // Shuffle
             {
                 const shuffledRubiksCubeMatrix = {
@@ -314,6 +334,7 @@ const RubiksCube2D: React.FC = () => {
 
         }
     };
+
 
     useEffect(() => {
         // Add event listener
