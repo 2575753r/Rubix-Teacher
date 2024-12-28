@@ -286,7 +286,15 @@ const RubiksCube2D: React.FC = () => {
         }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    useEffect(() => {
+        // Add event listener
+        window.addEventListener('keydown', handleKeyDown);
+
+        // Cleanup on unmount
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [rubiksCubeMatrix]);
 
 
     const renderFace = (face: string[][], label: string) => {
