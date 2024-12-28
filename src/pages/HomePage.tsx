@@ -23,10 +23,10 @@ const HomePage = () => {
 
 const styles = {
     container: {
-        height: '100vh', // Full viewport height
-        width: '100vw', // Full viewport width
+        height: '100vh',
+        width: '100vw',
         display: 'flex',
-        flexDirection: 'column' as const, // Header on top, content below
+        flexDirection: 'column' as const,
         fontFamily: 'Arial, sans-serif',
     },
     header: {
@@ -34,18 +34,18 @@ const styles = {
         marginBottom: '20px',
     },
     content: {
-        flex: 1, // Fills remaining space below the header
-        display: 'flex', // Horizontal layout for content
-        padding: '0 20px', // Adds horizontal padding to the entire content area
-        position: 'relative' as const, // Allows positioning of the bottom-right corner element
+        flex: 1,
+        display: 'flex',
+        padding: '0 20px',
+        position: 'relative' as const,
     },
     center: {
-        flex: 1, // Fills the remaining horizontal space
+        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%', // Stretch to full height of content
-        overflow: 'hidden', // Prevent content overflow
+        height: '100%',
+        overflow: 'hidden',
         position: 'relative' as const,
     }
 };
