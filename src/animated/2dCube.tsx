@@ -23,51 +23,6 @@ const RubiksCube2D: React.FC = () => {
         return rotated;
     };
 
-    const scrambleMatrix = () => {
-        const axes = ['x', 'y', 'z'] as const;
-        const directions = [-1, 1];
-        const layers = [-1, 0, 1];
-
-        // Number of random moves to scramble
-        const scrambleMoves = 20;
-
-        for (let i = 0; i < scrambleMoves; i++) {
-            const axis = axes[Math.floor(Math.random() * axes.length)];
-            const direction = directions[Math.floor(Math.random() * directions.length)];
-            const layer = layers[Math.floor(Math.random() * layers.length)];
-
-            const angle = direction * Math.PI / 2;
-
-
-            // Update the logical matrix
-            if (axis === 'x') {
-                if (layer === -1) rubiksCubeMatrix.left = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.left)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.left);
-                if (layer === 1) rubiksCubeMatrix.right = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.right)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.right);
-            } else if (axis === 'y') {
-                if (layer === -1) rubiksCubeMatrix.bottom = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.bottom)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.bottom);
-                if (layer === 1) rubiksCubeMatrix.top = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.top)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.top);
-            } else if (axis === 'z') {
-                if (layer === -1) rubiksCubeMatrix.back = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.back)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.back);
-                if (layer === 1) rubiksCubeMatrix.front = direction === 1
-                    ? rotateFaceClockwise(rubiksCubeMatrix.front)
-                    : rotateFaceCounterclockwise(rubiksCubeMatrix.front);
-            }
-        }
-
-        // Update the Cube state
-        setRubiksCube({ ...rubiksCubeMatrix });
-    };
-
 
     // Keydown event handler to rotate faces
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -229,8 +184,6 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            // Add cases for top (`u`, `i`) and bottom (`d`, `c`)...
-
             case 'q': // Reset the matrix
                 setRubiksCube({
                     front: Array(3).fill(null).map(() => Array(3).fill('white')),
@@ -241,6 +194,82 @@ const RubiksCube2D: React.FC = () => {
                     bottom: Array(3).fill(null).map(() => Array(3).fill('orange')),
                 });
                 break;
+            case 'u': // Up clockwise
+            {
+                const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
+                newRubiksCubeMatrix.top = rotateFaceClockwise(newRubiksCubeMatrix.top);
+
+                const frontTopRow = [...newRubiksCubeMatrix.front[0]];
+                const rightTopRow = [...newRubiksCubeMatrix.right[0]];
+                const backTopRow = [...newRubiksCubeMatrix.back[0]];
+                const leftTopRow = [...newRubiksCubeMatrix.left[0]];
+
+                newRubiksCubeMatrix.front[0] = leftTopRow;
+                newRubiksCubeMatrix.right[0] = frontTopRow;
+                newRubiksCubeMatrix.back[0] = rightTopRow;
+                newRubiksCubeMatrix.left[0] = backTopRow;
+
+                setRubiksCube(newRubiksCubeMatrix);
+                break;
+            }
+
+            case 'U': // Up counterclockwise
+            {
+                const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
+                newRubiksCubeMatrix.top = rotateFaceCounterclockwise(newRubiksCubeMatrix.top);
+
+                const frontTopRow = [...newRubiksCubeMatrix.front[0]];
+                const rightTopRow = [...newRubiksCubeMatrix.right[0]];
+                const backTopRow = [...newRubiksCubeMatrix.back[0]];
+                const leftTopRow = [...newRubiksCubeMatrix.left[0]];
+
+                newRubiksCubeMatrix.front[0] = rightTopRow;
+                newRubiksCubeMatrix.right[0] = backTopRow;
+                newRubiksCubeMatrix.back[0] = leftTopRow;
+                newRubiksCubeMatrix.left[0] = frontTopRow;
+
+                setRubiksCube(newRubiksCubeMatrix);
+                break;
+            }
+
+            // Down face (Y=-1)
+            case 'd': // Down clockwise
+            {
+                const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
+                newRubiksCubeMatrix.bottom = rotateFaceClockwise(newRubiksCubeMatrix.bottom);
+
+                const frontBottomRow = [...newRubiksCubeMatrix.front[2]];
+                const rightBottomRow = [...newRubiksCubeMatrix.right[2]];
+                const backBottomRow = [...newRubiksCubeMatrix.back[2]];
+                const leftBottomRow = [...newRubiksCubeMatrix.left[2]];
+
+                newRubiksCubeMatrix.front[2] = rightBottomRow;
+                newRubiksCubeMatrix.right[2] = backBottomRow;
+                newRubiksCubeMatrix.back[2] = leftBottomRow;
+                newRubiksCubeMatrix.left[2] = frontBottomRow;
+
+                setRubiksCube(newRubiksCubeMatrix);
+                break;
+            }
+
+            case 'D': // Down counterclockwise
+            {
+                const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
+                newRubiksCubeMatrix.bottom = rotateFaceCounterclockwise(newRubiksCubeMatrix.bottom);
+
+                const frontBottomRow = [...newRubiksCubeMatrix.front[2]];
+                const rightBottomRow = [...newRubiksCubeMatrix.right[2]];
+                const backBottomRow = [...newRubiksCubeMatrix.back[2]];
+                const leftBottomRow = [...newRubiksCubeMatrix.left[2]];
+
+                newRubiksCubeMatrix.front[2] = leftBottomRow;
+                newRubiksCubeMatrix.right[2] = frontBottomRow;
+                newRubiksCubeMatrix.back[2] = rightBottomRow;
+                newRubiksCubeMatrix.left[2] = backBottomRow;
+
+                setRubiksCube(newRubiksCubeMatrix);
+                break;
+            }
 
             case 's': // Shuffle
             {
