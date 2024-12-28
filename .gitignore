@@ -10,8 +10,11 @@
 # testing
 /coverage
 
+
 # production
 /build
+.idea/
+
 
 # misc
 .DS_Store
