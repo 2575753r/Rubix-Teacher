@@ -48,7 +48,9 @@ const HomePage = () => {
 
 
                     <div style={styles.rightPanel}>
-                        <AlgorithmList onBeginnerMethodSelected={handleBeginnerMethodSelected} />
+                        <AlgorithmList onBeginnerMethodSelected={handleBeginnerMethodSelected}/>
+                        <button style={{padding: 20}}> Scramble </button>
+                        <button style={{padding: 20}}> Info</button>
                     </div>
                 </div>
 
@@ -107,12 +109,14 @@ const styles = {
     rightPanel: {
         flex: '0 0 250px',
         maxHeight: '400px',
-        borderRadius: '5px',
+        borderRadius: '20px',
         padding: '10px',
         overflowY: 'auto' as 'auto',
         boxSizing: 'border-box' as 'border-box',
         marginLeft: '20px',
         backgroundColor: 'white',
+
+
     },
     bottomRight: {
         position: 'absolute' as const,
