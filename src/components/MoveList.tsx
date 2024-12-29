@@ -1,44 +1,129 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-interface MoveListProps {
-    shouldShowMoves: boolean; // Explicit type for the prop
-}
 
-const MoveList: React.FC<MoveListProps> = ({ shouldShowMoves }) => {
+
+const MoveList = () => {
+
+    // Temporary move list for testing
     const moves =
         [
-            "D", "F'", "D'", // White-green edge
-            "R", "U", "R'", // White-orange edge
-            "L'", "D'", "L", // White-blue edge
-            "F", "U'", "F'", // White-red edge
-            "R'", "D'", "R", "D", // White-green-orange corner
-            "F", "D'", "F'", // White-green-red corner
-            "L", "D'", "L'", "D", // White-blue-orange corner
-            "R'", "D", "R", // White-blue-red corner
-            "U", "L'", "U'", "L", "U'", "F'", "U", "F", // Orange-green edge
-            "U'", "R", "U", "R'", "U", "F", "U'", "F'", // Orange-blue edge
-            "U'", "R", "U", "R'", "U", "F", "U'", "F'", // Red-blue edge
-            "U", "L'", "U'", "L", "U'", "F'", "U", "F", // Red-green edge
-            "F", "R", "U", "R'", "U'", "F'", // Yellow L-shape
-            "F", "R", "U", "R'", "U'", "F'", // Yellow line
-            "R", "U", "R'", "U", "R", "U2", "R'", // Align yellow edges
-            "U", "R", "U'", "L'", "U", "R'", "U'", "L", // Position yellow corners
-            "R'", "D'", "R", "D", // Orient yellow corner (repeat as needed)
-            "R2", "U", "R", "U", "R'", "U'", "R'", "U'", "R'", "U", "R'" // Final layer edges
+            "D", "F'", "D'",
+            "R", "U", "R'",
+            "L'", "D'", "L",
+            "F", "U'", "F'",
+            "R'", "D'", "R", "D",
+            "F", "D'", "F'",
+            "L", "D'", "L'", "D",
+            "R'", "D", "R",
+            "U", "L'", "U'", "L", "U'", "F'", "U", "F",
+            "U'", "R", "U", "R'", "U", "F", "U'", "F'",
+            "U'", "R", "U", "R'", "U", "F", "U'", "F'",
+            "U", "L'", "U'", "L", "U'", "F'", "U", "F",
+            "F", "R", "U", "R'", "U'", "F'",
+            "F", "R", "U", "R'", "U'", "F'",
+            "R", "U", "R'", "U", "R", "U2", "R'",
+            "U", "R", "U'", "L'", "U", "R'", "U'", "L",
+            "R'", "D'", "R", "D",
+            "R2", "U", "R", "U", "R'", "U'", "R'", "U'", "R'", "U", "R'"
         ];
 
+    const [index, setIndex] = useState(0);
+    const scrollerRef = useRef<HTMLDivElement | null>(null);
+
+    // Move scroller
+    useEffect(() => {
+
+        // Ensure move is within bounds
+        if (index >= 0 && index < moves.length) {
+
+            // Use current position as current scroller
+            const scroller = scrollerRef.current;
+
+            // Access all children and cast specific index as a
+            const selectedTicket = scroller?.children[index] as HTMLElement;
+            if (selectedTicket) {
+                selectedTicket.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+    }, [index]);
+
+    const previous = () => {
+        setIndex((prev) => Math.max(prev - 1, 0));
+    };
+
+    const next = () => {
+        setIndex((prev) => Math.min(prev + 1, moves.length - 1));
+    };
 
 
     return (
-        <div className="scrollable-box">
-            <h3>List of Moves</h3>
-            {shouldShowMoves && (
-                <ul>
-                    {moves.map((move, index) => (
-                        <li key={index}>{move}</li>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+
+            <div
+                style={{
+                    position: "relative",
+                    height: "500px",
+
+                    // Maybe see if we can get this to be hidden
+                    overflow: "scroll",
+                    border: "1px solid #ccc",
+                    marginBottom: "20px",
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "5px",
+
+                        // Alter this to adjust Y movement
+                        transform: `translateY(-${index * 50}px)`,
+
+                        // Alter this to adjust speed
+                        transition: "transform 0.0005s ease",
+                    }}
+                >
+                    {moves.map((move, idx) => (
+                        <div
+                            key={idx}
+                            style={{
+                                padding: "20px",
+                                backgroundColor: idx === index ? "blue" : "lightgray",
+                                color: idx === index ? "white" : "black",
+                                borderRadius: "5px",
+                                textAlign: "center",
+                                transition: "background-color 0.3s",
+                            }}
+                        >
+                            {move}
+                        </div>
                     ))}
-                </ul>
-            )}
+                </div>
+            </div>
+
+            <div style={{ marginTop: "20px" }}>
+                <button
+                    onClick={previous}
+                    disabled={index === 0}
+                    style={{
+                        marginRight: "10px",
+                        padding: "10px 20px",
+                        cursor: index === 0 ? "not-allowed" : "pointer",
+                    }}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={next}
+                    disabled={index === moves.length - 1}
+                    style={{
+                        padding: "10px 20px",
+                        cursor: index === moves.length - 1 ? "not-allowed" : "pointer",
+                    }}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };

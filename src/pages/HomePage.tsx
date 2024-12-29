@@ -32,7 +32,7 @@ const HomePage = () => {
                 <div style={styles.content}>
 
                     <div style={styles.leftPanel}>
-                        <MoveList shouldShowMoves={showMoves} />
+                        <MoveList/>
                     </div>
 
 
@@ -76,7 +76,7 @@ const styles = {
         maxHeight: '400px',
         borderRadius: '5px',
         padding: '10px',
-        overflowY: 'auto' as 'auto',
+        // overflowY: 'auto' as 'auto',
         boxSizing: 'border-box' as 'border-box',
         marginRight: '20px',
         backgroundColor: 'white',

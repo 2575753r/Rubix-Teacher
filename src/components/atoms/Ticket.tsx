@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 interface TicketProps {
     name: string;
-    onClick?: () => void; // Optional function to handle click
+    onClick?: () => void;
 }
 
 const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
@@ -12,7 +12,7 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
     const handleClick = () => {
         setIsSelected((prev) => !prev);
         if (onClick) {
-            onClick(); // Trigger the callback if provided
+            onClick();
         }
     };
 
@@ -22,7 +22,7 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
 
     return (
         <div>
-            {/* Main Ticket */}
+
             <div
                 onClick={handleClick}
                 style={{
@@ -41,8 +41,8 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
                 <span>{name}</span>
                 <button
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering the ticket's main click
-                        togglePopup(); // Show the popup
+                        e.stopPropagation();
+                        togglePopup();
                     }}
                     style={{
                         background: 'none',
@@ -55,7 +55,6 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
                 </button>
             </div>
 
-            {/* Popup */}
             {showPopup && (
                 <div
                     style={{
@@ -98,27 +97,7 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
                         </button>
                         <h2>Beginner's Method</h2>
                         <ol>
-                            <li>Form the white cross by aligning white edge pieces with the white center.</li>
-                            <li>
-                                Place the white corners in their correct positions using <code>R' D' R D</code> until they
-                                match.
-                            </li>
-                            <li>Complete the middle layer edges using the algorithms:</li>
-                            <ul>
-                                <li>
-                                    For moving an edge left: <code>U' L' U L U F U' F'</code>
-                                </li>
-                                <li>
-                                    For moving an edge right: <code>U R U' R' U' F' U F</code>
-                                </li>
-                            </ul>
-                            <li>Form the yellow cross on the top face using <code>F R U R' U' F'</code>.</li>
-                            <li>Position the yellow edges correctly using <code>R U R' U R U2 R'</code>.</li>
-                            <li>
-                                Position and orient the yellow corners using <code>U R U' L' U R' U' L</code> or similar
-                                algorithms.
-                            </li>
-                            <li>Finish solving the cube by aligning the last layer edges and corners.</li>
+
                         </ol>
                     </div>
                 </div>
