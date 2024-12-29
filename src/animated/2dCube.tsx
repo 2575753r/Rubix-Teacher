@@ -200,7 +200,8 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'u': // Up counterclockwise
+            case 'u':
+                // Up counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.top = rotateFaceCounterclockwise(newRubiksCubeMatrix.top);
