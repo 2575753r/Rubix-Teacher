@@ -25,15 +25,6 @@ const Cube: React.FC = () => {
         const cubeGroup = new THREE.Group();
         scene.add(cubeGroup);
 
-        const colors = [
-            0xff0000, // Red
-            0x00ff00, // Green
-            0x0000ff, // Blue
-            0xffff00, // Yellow
-            0xffa500, // Orange
-            0xffffff, // White
-        ];
-
         const cubeSize = 0.9;
         const offset = cubeSize + 0.05;
 
@@ -63,7 +54,6 @@ const Cube: React.FC = () => {
             }
         }
 
-
         // Helper function to get cubes on a specific face
         const getFaceCubes = (axis: 'x' | 'y' | 'z', index: number) => {
             return cubes.filter(cube => {
@@ -82,8 +72,8 @@ const Cube: React.FC = () => {
 
             // Attach the cubes to the pivot for rotation
             faceCubes.forEach(cube => {
-                cubeGroup.remove(cube); // Remove from the main group
-                pivot.add(cube); // Add to the pivot group
+                cubeGroup.remove(cube);
+                pivot.add(cube);
             });
 
             // Rotate the pivot group
@@ -99,24 +89,28 @@ const Cube: React.FC = () => {
             pivot.updateMatrixWorld();
             faceCubes.forEach(cube => {
                 cube.applyMatrix4(pivot.matrixWorld);
-                pivot.remove(cube); // Remove from the pivot group
-                cubeGroup.add(cube); // Reattach to the main group
+
+                // Remove from the pivot group
+                pivot.remove(cube);
+
+                // Reattach to the main group
+                cubeGroup.add(cube);
             });
 
-            scene.remove(pivot); // Remove the pivot from the scene
+            // Remove the pivot
+            scene.remove(pivot);
         };
 
-        // Keydown event handler to rotate faces
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
 
                 // Front rotate clockwise
-                case 'v':
+                case 'f':
                     rotateFace('z', 1, -Math.PI / 2);
                     break;
 
                 // Front counterclockwise
-                case 'f':
+                case 'F':
                     rotateFace('z', 1, Math.PI / 2);
                     break;
 
@@ -126,7 +120,7 @@ const Cube: React.FC = () => {
                     break;
 
                 // Back counterclockwise
-                case 'n':
+                case 'B':
                     rotateFace('z', -1, Math.PI / 2);
                     break;
 
@@ -136,7 +130,7 @@ const Cube: React.FC = () => {
                     break;
 
                 // Left counterclockwise
-                case 'k':
+                case 'L':
                     rotateFace('x', -1, Math.PI / 2);
                     break;
 
@@ -145,10 +139,29 @@ const Cube: React.FC = () => {
                     rotateFace('x', 1, -Math.PI / 2);
                     break;
 
-                case 't': // Right counterclockwise
+                case 'R': // Right counterclockwise
                     rotateFace('x', 1, Math.PI / 2);
                     break;
 
+                // Top rotate clockwise
+                case 'u':
+                    rotateFace('y', 1, -Math.PI / 2);
+                    break;
+
+                // Top counterclockwise
+                case 'U':
+                    rotateFace('y', 1, Math.PI / 2);
+                    break;
+
+                // Bottom rotate clockwise
+                case 'd':
+                    rotateFace('y', -1, -Math.PI / 2);
+                    break;
+
+                // Bottom counterclockwise
+                case 'D':
+                    rotateFace('y', -1, Math.PI / 2);
+                    break;
 
             }
 
