@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import RubiksCube from '../animated/Cube';
 import { RubiksCubeProvider } from '../animated/RubiksCubeContext';
 import RubiksCube2D from '../animated/2dCube';
+import AlgorithmList from "../components/AlgorithmList";
+import MoveList from "../components/MoveList";
 
 const HomePage = () => {
     const [showMoves, setShowMoves] = useState(false);
@@ -21,19 +23,6 @@ const HomePage = () => {
     };
 
 
-    const [rubiksCube, setRubiksCube] = useState({
-        front: Array(3).fill(Array(3).fill('white')),
-        back: Array(3).fill(Array(3).fill('yellow')),
-        left: Array(3).fill(Array(3).fill('green')),
-        right: Array(3).fill(Array(3).fill('blue')),
-        top: Array(3).fill(Array(3).fill('red')),
-        bottom: Array(3).fill(Array(3).fill('orange')),
-    });
-
-
-    const handleMatrixUpdate = (updatedCube: typeof rubiksCube) => {
-        setRubiksCube(updatedCube);
-    };
 
     const handleBeginnerMethodSelected = () => {
         setShowMoves(true);
@@ -69,7 +58,7 @@ const HomePage = () => {
                 <div style={styles.bottomRight}>
                     <RubiksCube2D />
                 </div>
-            </div>
+
         </RubiksCubeProvider>
     );
 };

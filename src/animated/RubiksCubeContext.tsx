@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+// This is a hook. Should be in its own directory
 // Define the shape of the Rubik's Cube state
 export interface RubiksCubeState {
     front: string[][];
