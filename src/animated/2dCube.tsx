@@ -1,23 +1,9 @@
 import React, {useEffect} from 'react';
-import { useRubiksCube } from './RubiksCubeContext';
-import * as THREE from "three";
+import {RubiksCubeState, useRubiksCube} from './RubiksCubeContext';
 
 const RubiksCube2D: React.FC = () => {
 
-    // Ability to use matrix in parent 'shared layout'
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
-
-    const convertToRubikSolverString = (rubiksCubeMatrix: { [key: string]: string[][] }): string => {
-        const faceOrder = ['top', 'left', 'front', 'right', 'back', 'bottom'];
-
-        // Iterate through the face order and concatenate the rows
-        let result = '';
-        faceOrder.forEach(face => {
-            result += rubiksCubeMatrix[face].flat().join('');
-        });
-
-        return result;
-    };
 
     const rotateFaceCounterclockwise = (matrix: string[][]): string[][] => {
         const rotated = matrix[0].map((_, index) =>
@@ -35,14 +21,13 @@ const RubiksCube2D: React.FC = () => {
         return rotated;
     };
 
-
     // Keydown event handler to rotate faces
     const handleKeyDown = (event: KeyboardEvent) => {
 
         switch (event.key) {
-            // Front face (Z=1)
-            case 'v': // Front clockwise
+            case 'f': // Front clockwise
             {
+                // create shallow copy
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.front = rotateFaceClockwise(newRubiksCubeMatrix.front);
 
@@ -60,7 +45,6 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            // Back face (Z=-1)
             case 'b': // Back clockwise
             {
 
@@ -81,7 +65,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'n': // Back counterclockwise
+            case 'B': // Back counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.back = rotateFaceCounterclockwise(newRubiksCubeMatrix.back);
@@ -101,7 +85,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'f': // Front counterclockwise
+            case 'F': // Front counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.front = rotateFaceCounterclockwise(newRubiksCubeMatrix.front);
@@ -120,7 +104,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 't': // Right counterclockwise
+            case 'R': // Right counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.right = rotateFaceCounterclockwise(newRubiksCubeMatrix.right);
@@ -130,6 +114,7 @@ const RubiksCube2D: React.FC = () => {
                 const bottomCol = newRubiksCubeMatrix.bottom.map((row: string[]) => row[2]);
                 const backCol = newRubiksCubeMatrix.back.map((row: string[]) => row[0]).reverse();
 
+
                 newRubiksCubeMatrix.top.forEach((row: string[], i: number) => (row[2] = backCol[i]));
                 newRubiksCubeMatrix.front.forEach((row: string[], i: number) => (row[2] = topCol[i]));
                 newRubiksCubeMatrix.bottom.forEach((row: string[], i: number) => (row[2] = frontCol[i]));
@@ -138,7 +123,7 @@ const RubiksCube2D: React.FC = () => {
 
                 break;
             }
-            // Left face (X=-1)
+
             case 'l': // Left clockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
@@ -158,7 +143,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'k': // Left counterclockwise
+            case 'L': // Left counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.left = rotateFaceCounterclockwise(newRubiksCubeMatrix.left);
@@ -196,8 +181,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            // Up face (Y=1)
-            case 'u': // Up clockwise
+            case 'U': // Up clockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.top = rotateFaceClockwise(newRubiksCubeMatrix.top);
@@ -216,7 +200,7 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            case 'U': // Up counterclockwise
+            case 'u': // Up counterclockwise
             {
                 const newRubiksCubeMatrix = { ...rubiksCubeMatrix };
                 newRubiksCubeMatrix.top = rotateFaceCounterclockwise(newRubiksCubeMatrix.top);
@@ -274,11 +258,6 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-
-
-
-            // Add cases for top (`u`, `i`) and bottom (`d`, `c`)...
-
             case 'q': // Reset the matrix
                 setRubiksCube({
                     front: Array(3).fill(null).map(() => Array(3).fill('white')),
@@ -289,52 +268,8 @@ const RubiksCube2D: React.FC = () => {
                     bottom: Array(3).fill(null).map(() => Array(3).fill('orange')),
                 });
                 break;
-
-
-            case 's': // Shuffle
-            {
-                const shuffledRubiksCubeMatrix = {
-                    front: [
-                        ['green', 'white', 'blue'],
-                        ['orange', 'red', 'green'],
-                        ['blue', 'yellow', 'orange'],
-                    ],
-                    back: [
-                        ['yellow', 'orange', 'white'],
-                        ['green', 'red', 'yellow'],
-                        ['blue', 'red', 'white'],
-                    ],
-                    left: [
-                        ['red', 'green', 'yellow'],
-                        ['blue', 'orange', 'red'],
-                        ['white', 'yellow', 'green'],
-                    ],
-                    right: [
-                        ['yellow', 'blue', 'orange'],
-                        ['white', 'green', 'red'],
-                        ['yellow', 'orange', 'blue'],
-                    ],
-                    top: [
-                        ['red', 'yellow', 'blue'],
-                        ['orange', 'white', 'green'],
-                        ['green', 'blue', 'white'],
-                    ],
-                    bottom: [
-                        ['blue', 'red', 'yellow'],
-                        ['green', 'orange', 'white'],
-                        ['red', 'yellow', 'orange'],
-                    ],
-                };
-
-                setRubiksCube(shuffledRubiksCubeMatrix);
-
-                break;
-            }
-
-
         }
     };
-
 
     useEffect(() => {
         // Add event listener
@@ -400,5 +335,4 @@ const RubiksCube2D: React.FC = () => {
         </div>
     );
 };
-
 export default RubiksCube2D;
