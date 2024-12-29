@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rubiksTeacher.apps.RubiksTeacherConfig"
+    "rubiksTeacher.apps.RubiksTeacherConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

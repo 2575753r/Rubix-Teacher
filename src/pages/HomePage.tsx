@@ -24,9 +24,6 @@ const HomePage = () => {
 
 
 
-    const handleBeginnerMethodSelected = () => {
-        setShowMoves(true);
-    };
 
     return (
         <RubiksCubeProvider>
@@ -48,7 +45,7 @@ const HomePage = () => {
 
 
                     <div style={styles.rightPanel}>
-                        <AlgorithmList onBeginnerMethodSelected={handleBeginnerMethodSelected}/>
+                        <AlgorithmList/>
                         <button style={{padding: 20}}> Scramble </button>
                         <button style={{padding: 20}}> Info</button>
                     </div>

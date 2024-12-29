@@ -1,11 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Ticket from './atoms/Ticket';
+import {RubiksCubeState, useRubiksCube} from '../animated/RubiksCubeContext';
 
-interface AlgorithmListProps {
-    onBeginnerMethodSelected: () => void;
-}
+const AlgorithmList = () => {
 
-const AlgorithmList: React.FC<AlgorithmListProps> = ({ onBeginnerMethodSelected }) => {
+    const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
+    const [beginner, setShowBeginner] = useState(false);
+
+    useEffect(()=> {
+
+        if(beginner){
+
+
+
+        }
+
+
+    },[beginner]);
+
+
+
     return (
 
         // Temporary
@@ -13,15 +27,15 @@ const AlgorithmList: React.FC<AlgorithmListProps> = ({ onBeginnerMethodSelected 
             <h3>Choice of Algorithms</h3>
             <Ticket
                 name="Beginner Method"
-                onClick={onBeginnerMethodSelected}
+                onClick={() => setShowBeginner(true)}
             />
             <Ticket
                 name="CFOP Method (Fridrich Method) Medium"
-                onClick={onBeginnerMethodSelected}
+
             />
             <Ticket
                 name="ZZ Method Advanced"
-                onClick={onBeginnerMethodSelected}
+
             />
         </div>
     );

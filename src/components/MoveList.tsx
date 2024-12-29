@@ -1,7 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-
-
 const MoveList = () => {
 
     // Temporary move list for testing
