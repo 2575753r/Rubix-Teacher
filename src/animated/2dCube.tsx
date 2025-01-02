@@ -6,9 +6,13 @@ const RubiksCube2D: React.FC = () => {
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
 
     const rotateFaceCounterclockwise = (matrix: string[][]): string[][] => {
-        const rotated = matrix[0].map((_, index) =>
-            matrix.map(row => row[matrix.length - 1 - index]).reverse()
+
+        const transposed = matrix[0].map((_, colIndex) =>
+            matrix.map(row => row[colIndex])
         );
+
+        const rotated = transposed.reverse();
+
         console.log('Matrix after counterclockwise rotation:', rotated);
         return rotated;
     };
@@ -248,7 +252,6 @@ const RubiksCube2D: React.FC = () => {
                 break;
             }
 
-            // todo fix back rotation
             case 'b': // Front clockwise
             {
                 // Create a deep copy
@@ -261,7 +264,7 @@ const RubiksCube2D: React.FC = () => {
                     down: rubiksCubeMatrix.down.map(row => [...row]),
                 };
 
-                newRubiksCubeMatrix.back = rotateFaceClockwise(newRubiksCubeMatrix.back);
+                newRubiksCubeMatrix.back = rotateFaceCounterclockwise(newRubiksCubeMatrix.back);
 
                 // Extract correct rows and columns
                 const leftColumn = newRubiksCubeMatrix.left.map(row => row[0]).reverse(); // Left column 2
