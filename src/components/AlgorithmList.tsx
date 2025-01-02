@@ -7,15 +7,15 @@ const AlgorithmList = () => {
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
     const [beginner, setShowBeginner] = useState(false);
 
+
+    // function ready for http request
     useEffect(()=> {
 
         if(beginner){
-
-
+            let matrixState = useRubiksCube;
+            // http request here
 
         }
-
-
     },[beginner]);
 
 

@@ -38,12 +38,18 @@ const Cube: React.FC = () => {
 
                     // Assign colors to faces based on position
                     const materials = [
-                        new THREE.MeshBasicMaterial({color: x === 1 ? 0x0000ff : 0x000000}),
-                        new THREE.MeshBasicMaterial({color: x === -1 ? 0x00ff00 : 0x000000}),
-                        new THREE.MeshBasicMaterial({color: y === 1 ? 0xff0000 : 0x000000}),
-                        new THREE.MeshBasicMaterial({color: y === -1 ? 0xffa500 : 0x000000}),
-                        new THREE.MeshBasicMaterial({color: z === 1 ? 0xffffff : 0x000000}),
-                        new THREE.MeshBasicMaterial({color: z === -1 ? 0xffff00 : 0x000000}),
+                        // Right face green
+                        new THREE.MeshBasicMaterial({color: x === 1 ? 0x00ff00 : 0x000000}),
+                        // Left face green
+                        new THREE.MeshBasicMaterial({color: x === -1 ? 0x0000ff : 0x000000}),
+                        // Top face yellow
+                        new THREE.MeshBasicMaterial({color: y === 1 ? 0xffff00 : 0x000000}),
+                        // Down face white
+                        new THREE.MeshBasicMaterial({color: y === -1 ? 0xffffff : 0x000000}),
+                        // Front face red
+                        new THREE.MeshBasicMaterial({color: z === 1 ? 0xff0000 : 0x000000}),
+                        // Back face orange
+                        new THREE.MeshBasicMaterial({color: z === -1 ? 0xffa500 : 0x000000}),
                     ];
 
                     const cube = new THREE.Mesh(geometry, materials);
@@ -104,42 +110,34 @@ const Cube: React.FC = () => {
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
 
-                // Front rotate clockwise
-                case 'f':
-                    rotateFace('z', 1, -Math.PI / 2);
-                    break;
 
-                // Front counterclockwise
-                case 'F':
-                    rotateFace('z', 1, Math.PI / 2);
-                    break;
 
                 // Back clockwise
                 case 'b':
                     rotateFace('z', -1, -Math.PI / 2);
                     break;
 
-                // Back counterclockwise
-                case 'B':
-                    rotateFace('z', -1, Math.PI / 2);
+                // // Back counterclockwise
+                // case 'B':
+                //     rotateFace('z', -1, Math.PI / 2);
+                //     break;
+
+                // Left counterclockwise
+                case 'L':
+                    rotateFace('x', -1, -Math.PI / 2);
                     break;
 
                 // Left clockwise
                 case 'l':
-                    rotateFace('x', -1, -Math.PI / 2);
-                    break;
-
-                // Left counterclockwise
-                case 'L':
                     rotateFace('x', -1, Math.PI / 2);
                     break;
 
-                // Right clockwise
+                // Right counterclockwise
                 case 'r':
                     rotateFace('x', 1, -Math.PI / 2);
                     break;
 
-                case 'R': // Right counterclockwise
+                case 'R': // Right clockwise
                     rotateFace('x', 1, Math.PI / 2);
                     break;
 
@@ -154,16 +152,26 @@ const Cube: React.FC = () => {
                     break;
 
                 // Bottom rotate clockwise
-                case 'd':
+                case 'D':
                     rotateFace('y', -1, -Math.PI / 2);
                     break;
 
                 // Bottom counterclockwise
-                case 'D':
+                case 'd':
                     rotateFace('y', -1, Math.PI / 2);
                     break;
+                // Front clockwise
+                case 'f':
+                    rotateFace('z', 1, -Math.PI / 2);
+                    break;
+                    // Front counterclockwise
+                case 'F':
+                    rotateFace('z', 1, Math.PI / 2);
+                    break;
+
 
             }
+
 
         };
 

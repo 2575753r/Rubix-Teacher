@@ -7,8 +7,8 @@ export interface RubiksCubeState {
     back: string[][];
     left: string[][];
     right: string[][];
-    top: string[][];
-    bottom: string[][];
+    up: string[][];
+    down: string[][];
 }
 
 // Create the context
@@ -20,12 +20,12 @@ const RubiksCubeContext = createContext<{
 // Provider component
 export const RubiksCubeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [rubiksCubeMatrix, setRubiksCube] = useState<RubiksCubeState>({
-        front: Array(3).fill(Array(3).fill('white')),
-        back: Array(3).fill(Array(3).fill('yellow')),
-        left: Array(3).fill(Array(3).fill('green')),
-        right: Array(3).fill(Array(3).fill('blue')),
-        top: Array(3).fill(Array(3).fill('red')),
-        bottom: Array(3).fill(Array(3).fill('orange')),
+        front: Array(3).fill(Array(3).fill('red')),
+        back: Array(3).fill(Array(3).fill('orange')),
+        left: Array(3).fill(Array(3).fill('blue')),
+        right: Array(3).fill(Array(3).fill('green')),
+        up: Array(3).fill(Array(3).fill('yellow')),
+        down: Array(3).fill(Array(3).fill('white')),
     });
 
     return (
