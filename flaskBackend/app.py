@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 
+from matrixProcesser import processMatrices
 from rubiksAlgorithms import processAlgorithm, processLayoutBeginner
 from flask_cors import CORS
 
@@ -27,10 +28,12 @@ def algorithm():
         if not cube_state or not solver:
             return jsonify("Invalid data: Missing 'cube_state' or 'solver'"), 400
 
-        print(cube_state)
+        layout = processMatrices(cube_state)
+
+        print(layout)
         print(solver)
 
-        result = processLayoutBeginner(cube_state, solver)
+        result = processLayoutBeginner(layout, solver)
 
         return jsonify({"result": result}), 200
 
