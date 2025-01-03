@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 
 from rubiksAlgorithms import processAlgorithm, processLayoutBeginner
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
@@ -16,14 +18,21 @@ def algorithm():
 
         data = request.get_json()
 
+        if not data:
+            return jsonify("Invalid data: No JSON found"), 400
+
         cube_state = data.get('cube_state')
         solver = data.get('solver')
+
+        if not cube_state or not solver:
+            return jsonify("Invalid data: Missing 'cube_state' or 'solver'"), 400
+
         print(cube_state)
         print(solver)
 
         result = processLayoutBeginner(cube_state, solver)
 
-        return jsonify(result), 200
+        return jsonify({"result": result}), 200
 
     except:
         return jsonify('Invalid data'), 400

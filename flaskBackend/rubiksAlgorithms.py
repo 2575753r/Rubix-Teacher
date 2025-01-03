@@ -1,6 +1,4 @@
-from flask import Flask, request, app
 import subprocess
-import rubik_solver
 
 def processAlgorithm(data):
 

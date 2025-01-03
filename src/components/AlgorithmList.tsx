@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Ticket from './atoms/Ticket';
 import {RubiksCubeState, useRubiksCube} from '../animated/RubiksCubeContext';
+import sendRequest from '../api';
 
 const AlgorithmList = () => {
 
@@ -17,6 +18,7 @@ const AlgorithmList = () => {
         if(beginner){
             let matrixState = useRubiksCube;
             // http request here
+            sendRequest()
 
         }
     },[beginner]);
