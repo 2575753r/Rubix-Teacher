@@ -1,26 +1,26 @@
 import axios from "axios";
+import {RubiksCubeState} from "./animated/RubiksCubeContext";
 
-const sendRequest = async () => {
+const sendRequest = async (rubiksCubeMatrix:RubiksCubeState)=>{
     try {
         const response = await axios.post("http://127.0.0.1:5000/algorithm", {
-            cube_state: "wowgybwyogygybyoggrowbrgywrborwggybrbwororbwborgowryby",
+            cube_state: rubiksCubeMatrix,
             solver: "Beginner",
         });
 
         console.log("Success:", response.data.result);
+        return response.data.result;
     } catch (error) {
+
         // @ts-ignore
         if (error.response) {
-
-            // Server error
             // @ts-ignore
             console.error("Error:", error.response.data.error);
         } else {
-
-            // Network or other
             // @ts-ignore
             console.error("Network error:", error.message);
         }
     }
 };
+
 export default sendRequest;
