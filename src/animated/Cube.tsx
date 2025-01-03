@@ -13,7 +13,7 @@ const Cube: React.FC = () => {
 
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0xffffff);
+        renderer.setClearColor(0xadd8e6);
 
         if (mountRef.current) {
             mountRef.current.appendChild(renderer.domElement);
@@ -202,7 +202,7 @@ const Cube: React.FC = () => {
         };
     }, []);
 
-    return <div ref={mountRef} style={{ width: '100vw', height: '100vh' }}
+    return <div ref={mountRef} style={{ width: '100vw', height: '100vh', background: 'lightblue'}}
     />;
 };
 

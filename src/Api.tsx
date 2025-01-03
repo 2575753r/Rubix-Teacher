@@ -1,11 +1,11 @@
 import axios from "axios";
 import {RubiksCubeState} from "./animated/RubiksCubeContext";
 
-const sendRequest = async (rubiksCubeMatrix:RubiksCubeState)=>{
+const sendRequest = async (rubiksCubeMatrix:RubiksCubeState, solver: string)=>{
     try {
         const response = await axios.post("http://127.0.0.1:5000/algorithm", {
             cube_state: rubiksCubeMatrix,
-            solver: "Beginner",
+            solver: solver,
         });
 
         console.log("Success:", response.data.result);

@@ -13,16 +13,16 @@ const AlgorithmList = () => {
     // moves hook that will update and produce the moves in the move list
 
     // function ready for http request
-    useEffect(()=> {
 
-        if(beginner){
-            // http request here
-            sendRequest(rubiksCubeMatrix)
-
-        }
-    },[beginner]);
-
-
+    function beginnerFunction() {
+        sendRequest(rubiksCubeMatrix, 'Beginner')
+    }
+    function CFOPFunction() {
+        sendRequest(rubiksCubeMatrix, "CFOP")
+    }
+    function KociembaFunction() {
+        sendRequest(rubiksCubeMatrix, "Kociemba")
+    }
 
     return (
 
@@ -31,14 +31,16 @@ const AlgorithmList = () => {
             <h3>Choice of Algorithms</h3>
             <Ticket
                 name="Beginner Method"
-                onClick={() => setShowBeginner(true)}
+                onClick={() => beginnerFunction()}
             />
             <Ticket
                 name="CFOP Method (Fridrich Method) Medium"
+                onClick={() => CFOPFunction()}
 
             />
             <Ticket
-                name="ZZ Method Advanced"
+                name="Kociemba Method Advanced"
+                onClick={()=> KociembaFunction}
 
             />
         </div>

@@ -71,17 +71,19 @@ const styles = {
         display: 'flex',
         flexDirection: 'column' as const,
         fontFamily: 'Arial, sans-serif',
-        backgroundColor: 'white',
+        backgroundColor: 'lightblue',
     },
     header: {
         textAlign: 'center' as const,
         marginBottom: '20px',
+        backgroundColor: 'lightblue',
     },
     content: {
         flex: 1,
         display: 'flex',
         padding: '0 20px',
         position: 'relative' as const,
+        backgroundColor: 'lightblue',
     },
     leftPanel: {
         flex: '0 0 250px',
@@ -93,7 +95,7 @@ const styles = {
 
         boxSizing: 'border-box' as 'border-box',
         marginRight: '20px',
-        backgroundColor: 'white',
+        backgroundColor: 'lightblue',
     },
     center: {
         flex: 1,
@@ -103,7 +105,7 @@ const styles = {
         height: '100%',
         overflow: 'hidden',
         position: 'relative' as const,
-        backgroundColor: 'white',
+        backgroundColor: 'lightblue',
     },
     rightPanel: {
         flex: '0 0 250px',
@@ -113,7 +115,7 @@ const styles = {
         overflowY: 'auto' as 'auto',
         boxSizing: 'border-box' as 'border-box',
         marginLeft: '20px',
-        backgroundColor: 'white',
+        backgroundColor: 'lightblue',
 
 
     },
@@ -125,7 +127,7 @@ const styles = {
         height: '200px',
 
         padding: '10px',
-        backgroundColor: 'white',
+        backgroundColor: 'lightblue',
 
     },
 };

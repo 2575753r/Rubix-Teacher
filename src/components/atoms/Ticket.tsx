@@ -36,6 +36,7 @@ const Ticket: React.FC<TicketProps> = ({ name, onClick }) => {
                     backgroundColor: isSelected ? 'blue' : 'white',
                     color: isSelected ? 'white' : 'black',
                     cursor: 'pointer',
+
                 }}
             >
                 <span>{name}</span>
