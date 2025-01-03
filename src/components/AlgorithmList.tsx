@@ -7,6 +7,9 @@ const AlgorithmList = () => {
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
     const [beginner, setShowBeginner] = useState(false);
 
+    // add http send here to send off the current matrix layout
+    // backend ill turn it into a string then process it
+    // moves hook that will update and produce the moves in the move list
 
     // function ready for http request
     useEffect(()=> {

@@ -48,6 +48,8 @@ const HomePage = () => {
                         <AlgorithmList/>
                         <button style={{padding: 20}}> Scramble </button>
                         <button style={{padding: 20}}> Info</button>
+                        <p> Contorls: f, u, d, l, r, b controls each face rotating clockwise</p>
+                        <p> F, U, D, L, R, B controls each face counterclockwise</p>
                     </div>
                 </div>
 

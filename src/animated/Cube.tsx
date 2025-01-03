@@ -117,13 +117,13 @@ const Cube: React.FC = () => {
                     rotateFace('z', -1, -Math.PI / 2);
                     break;
 
-                // // Back counterclockwise
+                // Back counterclockwise
                 // case 'B':
                 //     rotateFace('z', -1, Math.PI / 2);
                 //     break;
 
                 // Left counterclockwise
-                case 'L':
+                case 'o':
                     rotateFace('x', -1, -Math.PI / 2);
                     break;
 
@@ -137,9 +137,9 @@ const Cube: React.FC = () => {
                     rotateFace('x', 1, -Math.PI / 2);
                     break;
 
-                case 'R': // Right clockwise
-                    rotateFace('x', 1, Math.PI / 2);
-                    break;
+                // case 'R': // Right clockwise
+                //     rotateFace('x', 1, Math.PI / 2);
+                //     break;
 
                 // Top rotate clockwise
                 case 'u':
@@ -156,7 +156,7 @@ const Cube: React.FC = () => {
                     rotateFace('y', -1, -Math.PI / 2);
                     break;
 
-                // Bottom counterclockwise
+                // Bottom counterclockwiseSS
                 case 'd':
                     rotateFace('y', -1, Math.PI / 2);
                     break;
@@ -165,9 +165,9 @@ const Cube: React.FC = () => {
                     rotateFace('z', 1, -Math.PI / 2);
                     break;
                     // Front counterclockwise
-                case 'F':
-                    rotateFace('z', 1, Math.PI / 2);
-                    break;
+                // case 'F':
+                //     rotateFace('z', 1, Math.PI / 2);
+                //     break;
 
 
             }

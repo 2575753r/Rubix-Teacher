@@ -2,6 +2,12 @@ import React, {useEffect, useRef, useState} from 'react';
 
 const MoveList = () => {
 
+
+    // moves to be presented here
+    // walking through the move list will call for the 3d and 2d visualisations to change accordingly
+    // need this to rerender whenever the list is altered
+
+
     // Temporary move list for testing
     const moves =
         [
