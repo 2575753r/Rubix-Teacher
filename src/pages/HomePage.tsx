@@ -4,6 +4,12 @@ import { RubiksCubeProvider } from '../animated/RubiksCubeContext';
 import RubiksCube2D from '../animated/2dCube';
 import AlgorithmList from "../components/AlgorithmList";
 import MoveList from "../components/MoveList";
+import {MoveProvider} from "../hooks/MoveContext";
+
+
+
+
+
 
 const HomePage = () => {
     const [showMoves, setShowMoves] = useState(false);
@@ -27,10 +33,12 @@ const HomePage = () => {
 
     return (
         <RubiksCubeProvider>
+            <MoveProvider>
 
 
             <div style={styles.container}>
-                <h1 style={styles.header}>Rubik's Teacher!</h1>
+
+
                 <div style={styles.content}>
 
 
@@ -40,13 +48,13 @@ const HomePage = () => {
 
 
                     <div style={styles.center}>
-                        <RubiksCube />
+                        <RubiksCube/>
                     </div>
 
 
                     <div style={styles.rightPanel}>
                         <AlgorithmList/>
-                        <button style={{padding: 20}}> Scramble </button>
+                        <button style={{padding: 20}}> Scramble</button>
                         <button style={{padding: 20}}> Info</button>
                         <p> Contorls: f, u, d, l, r, b controls each face rotating clockwise</p>
                         <p> F, U, D, L, R, B controls each face counterclockwise</p>
@@ -56,9 +64,11 @@ const HomePage = () => {
             </div>
 
 
-                <div style={styles.bottomRight}>
-                    <RubiksCube2D />
-                </div>
+            <div style={styles.bottomRight}>
+                <RubiksCube2D/>
+            </div>
+
+            </MoveProvider>
 
         </RubiksCubeProvider>
     );

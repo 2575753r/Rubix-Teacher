@@ -2,26 +2,31 @@ import React, {useEffect, useState} from 'react';
 import Ticket from './atoms/Ticket';
 import {RubiksCubeState, useRubiksCube} from '../animated/RubiksCubeContext';
 import sendRequest from '../Api';
+import {MoveContextState, useMoveContext} from "../hooks/MoveContext";
 
 const AlgorithmList = () => {
 
     const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
+    const {Moves, setMoves}= useMoveContext()
     const [beginner, setShowBeginner] = useState(false);
 
-    // add http send here to send off the current matrix layout
-    // backend ill turn it into a string then process it
-    // moves hook that will update and produce the moves in the move list
+    async function beginnerFunction() {
+        setMoves({Moves : []})
+        const result = await sendRequest(rubiksCubeMatrix, 'Beginner');
+        setMoves({ Moves: result });
 
-    // function ready for http request
+    }
 
-    function beginnerFunction() {
-        sendRequest(rubiksCubeMatrix, 'Beginner')
+    async function CFOPFunction() {
+        setMoves({Moves : []})
+        const result = await(sendRequest(rubiksCubeMatrix, "CFOP"));
+        setMoves({ Moves: result });
     }
-    function CFOPFunction() {
-        sendRequest(rubiksCubeMatrix, "CFOP")
-    }
-    function KociembaFunction() {
-        sendRequest(rubiksCubeMatrix, "Kociemba")
+    async function KociembaFunction() {
+        setMoves({Moves : []})
+        const result = await(sendRequest(rubiksCubeMatrix, "Kociemba"));
+        setMoves({ Moves: result });
+
     }
 
     return (

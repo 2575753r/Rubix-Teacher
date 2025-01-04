@@ -4,13 +4,14 @@ def processAlgorithm(data):
 
     cube_state = data['cube_state']
     solver = ['algorithm']
+    print('-----------------------')
+    print(solver)
 
     result = processLayoutBeginner(cube_state, solver)
     print(result)
     return
 
 def processLayoutBeginner(cube_state, solver):
-
     try:
         # Run the subprocess command
         result = subprocess.run(
@@ -21,28 +22,34 @@ def processLayoutBeginner(cube_state, solver):
         )
 
         if result.returncode == 0:
-
             # Split output by lines
             lines = result.stdout.splitlines()
 
             # Extract solution
+
             for line in lines:
                 if line.strip().startswith("Solution"):
-
-                    # Extract the solution moves
+                    # Remove solution from string
                     solution = line.strip().replace("Solution", "").strip()
-                    print("Extracted Solution:", solution)
-                    return solution
+
+                    # Split into individual moves
+                    solution_list = solution.split(", ")
+
+                    # Clean list
+                    solution_list = [move.strip() for move in solution_list if move.strip()]
+
+                    return solution_list
 
             print("Solution not found")
-            return None
+            return []
 
         else:
             print("Error occurred:", result.stderr.strip())
-            return f"Error: {result.stderr.strip()}"
+            return [f"Error: {result.stderr.strip()}"]
 
     except Exception as e:
         print("An error occurred:", e)
-        return str(e)
+        return [str(e)]
+
 
 
