@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
 
 // Define MoveContextState with Moves defaulting to an empty array
 export interface MoveContextState {
@@ -23,6 +23,17 @@ export const MoveProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             ...prevState,
             MoveIndex: newIndex,
         }));
+    };
+
+
+    useEffect(() =>{
+        triggerMove(Moves.Moves[Moves.MoveIndex])
+    }, [Moves.MoveIndex])
+
+    // Globally indicate a move change
+    const triggerMove = (move: string) => {
+        const event = new CustomEvent('cube-move', { detail: { move } });
+        window.dispatchEvent(event);
     };
 
     return (

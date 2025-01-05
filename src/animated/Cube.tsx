@@ -178,6 +178,71 @@ const Cube: React.FC = () => {
             }
         };
 
+        // Handle custom move events
+        const handleMove = (event: CustomEvent) => {
+            const { move } = event.detail;
+            console.log('------------------')
+            console.log(move)
+            switch (move) {
+                case 'B':
+                    rotateFace('z', -1, -Math.PI / 2);
+                    break;
+
+                // Back counterclockwise
+                // case 'B':
+                //     rotateFace('z', -1, Math.PI / 2);
+                //     break;
+
+                // Left counterclockwise
+                case "L'":
+                    rotateFace('x', -1, -Math.PI / 2);
+                    break;
+
+                // Left clockwise
+                case 'L':
+                    rotateFace('x', -1, Math.PI / 2);
+                    break;
+
+                // Right counterclockwise
+                case "R'":
+                    rotateFace('x', 1, -Math.PI / 2);
+                    break;
+
+                // case 'R': // Right clockwise
+                //     rotateFace('x', 1, Math.PI / 2);
+                //     break;
+
+                // Top rotate clockwise
+                case 'U':
+                    rotateFace('y', 1, -Math.PI / 2);
+                    break;
+
+                // Top counterclockwise
+                case "U'":
+                    rotateFace('y', 1, Math.PI / 2);
+                    break;
+
+                // Bottom rotate clockwise
+                case 'D':
+                    rotateFace('y', -1, -Math.PI / 2);
+                    break;
+
+                // Bottom counterclockwiseSS
+                case "D'":
+                    rotateFace('y', -1, Math.PI / 2);
+                    break;
+                // Front clockwise
+                case 'F':
+                    rotateFace('z', 1, -Math.PI / 2);
+                    break;
+                // Front counterclockwise
+                // case 'F':
+                //     rotateFace('z', 1, Math.PI / 2);
+                //     break;
+            }
+        };
+
+
         // Move list controls
 
 
@@ -198,12 +263,14 @@ const Cube: React.FC = () => {
         };
 
         window.addEventListener('resize', handleResize);
+        window.addEventListener('cube-move', handleMove as EventListener);
 
 
 
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('cube-move', handleMove as EventListener);
             if (mountRef.current) {
                 mountRef.current.removeChild(renderer.domElement);
             }
