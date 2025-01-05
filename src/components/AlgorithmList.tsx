@@ -11,21 +11,21 @@ const AlgorithmList = () => {
     const [beginner, setShowBeginner] = useState(false);
 
     async function beginnerFunction() {
-        setMoves({Moves : []})
+        setMoves({Moves : [], MoveIndex:0})
         const result = await sendRequest(rubiksCubeMatrix, 'Beginner');
-        setMoves({ Moves: result });
+        setMoves({ Moves: result , MoveIndex:0});
 
     }
 
     async function CFOPFunction() {
-        setMoves({Moves : []})
+        setMoves({Moves : [], MoveIndex:0})
         const result = await(sendRequest(rubiksCubeMatrix, "CFOP"));
-        setMoves({ Moves: result });
+        setMoves({ Moves: result , MoveIndex:0});
     }
     async function KociembaFunction() {
-        setMoves({Moves : []})
+        setMoves({Moves : [], MoveIndex:0})
         const result = await(sendRequest(rubiksCubeMatrix, "Kociemba"));
-        setMoves({ Moves: result });
+        setMoves({ Moves: result , MoveIndex:0});
 
     }
 

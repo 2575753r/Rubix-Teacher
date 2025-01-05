@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMoveContext } from "../hooks/MoveContext";
 
 const MoveList = () => {
-    const { Moves, setMoves } = useMoveContext();
+    const { Moves, setMoves, updateMoveIndex} = useMoveContext();
     const [index, setIndex] = useState(0);
     const scrollerRef = useRef<HTMLDivElement | null>(null);
-
 
     // Move scroller
     useEffect(() => {
@@ -22,10 +21,12 @@ const MoveList = () => {
 
     const previous = () => {
         setIndex((prev) => Math.max(prev - 1, 0));
+        updateMoveIndex(index);
     };
 
     const next = () => {
         setIndex((prev) => Math.min(prev + 1, Moves.Moves.length - 1));
+        updateMoveIndex(index);
     };
 
     return (

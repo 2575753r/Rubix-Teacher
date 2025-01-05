@@ -1,10 +1,18 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import {MoveContextState, useMoveContext} from "../hooks/MoveContext";
 
 const Cube: React.FC = () => {
 
+
     const mountRef = useRef<HTMLDivElement | null>(null);
+    const {Moves} = useMoveContext();
+    const [currentMove, setCurrentMove]= useState(' ');
+
+    useEffect(()=>{
+        const setCurrentMove = Moves.Moves[Moves.MoveIndex];
+    }, [Moves.MoveIndex])
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -107,11 +115,10 @@ const Cube: React.FC = () => {
             scene.remove(pivot);
         };
 
+
+        // User controls
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
-
-
-
                 // Back clockwise
                 case 'b':
                     rotateFace('z', -1, -Math.PI / 2);
@@ -168,12 +175,11 @@ const Cube: React.FC = () => {
                 // case 'F':
                 //     rotateFace('z', 1, Math.PI / 2);
                 //     break;
-
-
             }
-
-
         };
+
+        // Move list controls
+
 
         window.addEventListener('keydown', handleKeyDown);
 
@@ -193,14 +199,21 @@ const Cube: React.FC = () => {
 
         window.addEventListener('resize', handleResize);
 
+
+
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('keydown', handleKeyDown);
             if (mountRef.current) {
                 mountRef.current.removeChild(renderer.domElement);
             }
+
         };
+
     }, []);
+
+    // Listen for MoveIndex changes
+
 
     return <div ref={mountRef} style={{ width: '100vw', height: '100vh', background: 'lightblue'}}
     />;
