@@ -27,7 +27,7 @@ const RubiksCube2D: React.FC = () => {
     };
 
 
-
+    // todo fix problems with counterclockwise rotations
     // Keydown event handler to rotate faces
     const handleKeyDown = (event: KeyboardEvent) => {
 

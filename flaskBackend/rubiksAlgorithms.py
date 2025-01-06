@@ -9,6 +9,8 @@ def processAlgorithm(data):
 
     result = processLayoutBeginner(cube_state, solver)
     print(result)
+
+    # todo make it so any ones indicating 2 moves are split into 2 single moves '2F' => 'F', 'F'
     return
 
 def processLayoutBeginner(cube_state, solver):

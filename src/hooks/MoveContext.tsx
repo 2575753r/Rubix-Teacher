@@ -25,7 +25,8 @@ export const MoveProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }));
     };
 
-
+    // todo reverse backwards movements
+    // todo ensure first move is the first index
     useEffect(() =>{
         triggerMove(Moves.Moves[Moves.MoveIndex])
     }, [Moves.MoveIndex])

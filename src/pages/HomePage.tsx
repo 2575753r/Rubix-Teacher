@@ -7,10 +7,6 @@ import MoveList from "../components/MoveList";
 import {MoveProvider} from "../hooks/MoveContext";
 
 
-
-
-
-
 const HomePage = () => {
     const [showMoves, setShowMoves] = useState(false);
 
@@ -33,6 +29,7 @@ const HomePage = () => {
 
     return (
         <RubiksCubeProvider>
+
             <MoveProvider>
 
 
