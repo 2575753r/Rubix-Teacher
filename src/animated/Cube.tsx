@@ -120,14 +120,14 @@ const Cube: React.FC = () => {
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
                 // Back clockwise
-                case 'b':
-                    rotateFace('z', -1, -Math.PI / 2);
-                    break;
+                // case 'B':
+                //     rotateFace('z', -1, -Math.PI / 2);
+                //     break;
 
                 // Back counterclockwise
-                // case 'B':
-                //     rotateFace('z', -1, Math.PI / 2);
-                //     break;
+                case 'b':
+                    rotateFace('z', -1, Math.PI / 2);
+                    break;
 
                 // Left counterclockwise
                 case 'o':
@@ -184,12 +184,16 @@ const Cube: React.FC = () => {
             console.log('------------------')
             console.log(move)
             switch (move) {
-                case 'B':
+
+                case 'Start':
+
+                    break;
+                case "B'":
                     rotateFace('z', -1, -Math.PI / 2);
                     break;
 
                 // Back counterclockwise
-                case "B'":
+                case "B":
                     rotateFace('z', -1, Math.PI / 2);
                     break;
 
@@ -239,6 +243,78 @@ const Cube: React.FC = () => {
                 case "F'":
                     rotateFace('z', 1, Math.PI / 2);
                     break;
+
+
+
+                // two moves
+                case "B'2":
+                    rotateFace('z', -1, -Math.PI / 2);
+                    rotateFace('z', -1, -Math.PI / 2);
+                    break;
+
+                // Back counterclockwise
+                case "B2":
+                    rotateFace('z', -1, Math.PI / 2);
+                    rotateFace('z', -1, Math.PI / 2);
+                    break;
+
+                // Left counterclockwise
+                case "L'2":
+                    rotateFace('x', -1, -Math.PI / 2);
+                    rotateFace('x', -1, -Math.PI / 2);
+                    break;
+
+                // Left clockwise
+                case 'L2':
+                    rotateFace('x', -1, Math.PI / 2);
+                    rotateFace('x', -1, Math.PI / 2);
+                    break;
+
+                // Right counterclockwise
+                case "R'2":
+                    rotateFace('x', 1, -Math.PI / 2);
+                    rotateFace('x', 1, -Math.PI / 2);
+                    break;
+
+                case 'R2': // Right clockwise
+                    rotateFace('x', 1, Math.PI / 2);
+                    rotateFace('x', 1, Math.PI / 2);
+                    break;
+
+                // Top rotate clockwise
+                case 'U2':
+                    rotateFace('y', 1, -Math.PI / 2);
+                    rotateFace('y', 1, -Math.PI / 2);
+                    break;
+
+                // Top counterclockwise
+                case "U'2":
+                    rotateFace('y', 1, Math.PI / 2);
+                    rotateFace('y', 1, Math.PI / 2);
+                    break;
+
+                // Bottom rotate clockwise
+                case 'D2':
+                    rotateFace('y', -1, -Math.PI / 2);
+                    rotateFace('y', -1, -Math.PI / 2);
+                    break;
+
+                // Bottom counterclockwises
+                case "D'2":
+                    rotateFace('y', -1, Math.PI / 2);
+                    rotateFace('y', -1, Math.PI / 2);
+                    break;
+                // Front clockwise
+                case 'F2':
+                    rotateFace('z', 1, -Math.PI / 2);
+                    rotateFace('z', 1, -Math.PI / 2);
+                    break;
+                // Front counterclockwise
+                case "F'2":
+                    rotateFace('z', 1, Math.PI / 2);
+                    rotateFace('z', 1, Math.PI / 2);
+                    break;
+
             }
         };
 

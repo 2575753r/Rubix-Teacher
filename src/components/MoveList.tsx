@@ -2,31 +2,34 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMoveContext } from "../hooks/MoveContext";
 
 const MoveList = () => {
-    const { Moves, setMoves, updateMoveIndex} = useMoveContext();
+    const { Moves, updateMoveIndex } = useMoveContext();
     const [index, setIndex] = useState(0);
     const scrollerRef = useRef<HTMLDivElement | null>(null);
 
-    // Move scroller
+    // Ensure the scroller focuses on the correct item
     useEffect(() => {
-
-        // Moves must be within bounds
         if (Moves.Moves && index >= 0 && index < Moves.Moves.length) {
             const scroller = scrollerRef.current;
             const selectedTicket = scroller?.children[index] as HTMLElement;
+
+            // Scroll the selected ticket into view
             if (selectedTicket) {
                 selectedTicket.scrollIntoView({ behavior: "smooth", block: "center" });
             }
+
+            // Trigger the move if it's not the placeholder
+            if (Moves.Moves[index] !== "Start") {
+                updateMoveIndex(index); // Synchronize with context
+            }
         }
-    }, [index, Moves.Moves]);
+    }, [index, Moves.Moves, updateMoveIndex]);
 
     const previous = () => {
         setIndex((prev) => Math.max(prev - 1, 0));
-        updateMoveIndex(index);
     };
 
     const next = () => {
         setIndex((prev) => Math.min(prev + 1, Moves.Moves.length - 1));
-        updateMoveIndex(index);
     };
 
     return (

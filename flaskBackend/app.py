@@ -33,7 +33,10 @@ def algorithm():
         print(layout)
         print(solver)
 
-        result = processLayoutBeginner(layout, solver)
+        result = processAlgorithm(layout, solver)
+
+
+
 
         return jsonify({"result": result}), 200
 

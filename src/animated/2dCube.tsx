@@ -340,36 +340,7 @@ const RubiksCube2D: React.FC = () => {
             //     break;
             // }
 
-            case 'b': // Front clockwise
-            {
-                // Create a deep copy
-                const newRubiksCubeMatrix = {
-                    front: rubiksCubeMatrix.front.map(row => [...row]),
-                    back: rubiksCubeMatrix.back.map(row => [...row]),
-                    left: rubiksCubeMatrix.left.map(row => [...row]),
-                    right: rubiksCubeMatrix.right.map(row => [...row]),
-                    up: rubiksCubeMatrix.up.map(row => [...row]),
-                    down: rubiksCubeMatrix.down.map(row => [...row]),
-                };
-
-                newRubiksCubeMatrix.back = rotateFaceCounterclockwise(newRubiksCubeMatrix.back);
-
-                // Extract correct rows and columns
-                const leftColumn = newRubiksCubeMatrix.left.map(row => row[0]).reverse(); // Left column 2
-                const upRow = newRubiksCubeMatrix.up[0];
-                const rightColumn = newRubiksCubeMatrix.right.map(row => row[2]).reverse();
-                const downRow = newRubiksCubeMatrix.down[2];
-
-                newRubiksCubeMatrix.up[0] = leftColumn;
-                newRubiksCubeMatrix.right.forEach((row, i) => {row[2] = upRow[i];});
-                newRubiksCubeMatrix.down[2] = rightColumn;
-                newRubiksCubeMatrix.left.forEach((row, i) => {row[0] = downRow[i];});
-
-                // Update the Rubik's Cube state
-                setRubiksCube(newRubiksCubeMatrix);
-                break;
-            }
-            // case 'B': // Front clockwise
+            // case 'b': // Front clockwise
             // {
             //     // Create a deep copy
             //     const newRubiksCubeMatrix = {
@@ -384,20 +355,58 @@ const RubiksCube2D: React.FC = () => {
             //     newRubiksCubeMatrix.back = rotateFaceClockwise(newRubiksCubeMatrix.back);
             //
             //     // Extract correct rows and columns
-            //     const leftColumn = newRubiksCubeMatrix.left.map(row => row[0]); // Left column 2
-            //     const upRow = newRubiksCubeMatrix.up[0].reverse();
-            //     const rightColumn = newRubiksCubeMatrix.right.map(row => row[2]);
-            //     const downRow = newRubiksCubeMatrix.down[2].reverse();              // Down row 1bbbbbbb
+            //     const leftColumn = newRubiksCubeMatrix.left.map(row => row[0]).reverse(); // Left column 2
+            //     const upRow = newRubiksCubeMatrix.up[0];
+            //     const rightColumn = newRubiksCubeMatrix.right.map(row => row[2]).reverse();
+            //     const downRow = newRubiksCubeMatrix.down[2];
             //
-            //     newRubiksCubeMatrix.up[0] = rightColumn;
-            //     newRubiksCubeMatrix.right.forEach((row, i) => {row[2] = downRow[i];});
-            //     newRubiksCubeMatrix.down[2] = leftColumn;
-            //     newRubiksCubeMatrix.left.forEach((row, i) => {row[2] = upRow[i];});
+            //     newRubiksCubeMatrix.up[0] = leftColumn;
+            //     newRubiksCubeMatrix.right.forEach((row, i) => {row[2] = upRow[i];});
+            //     newRubiksCubeMatrix.down[2] = rightColumn;
+            //     newRubiksCubeMatrix.left.forEach((row, i) => {row[0] = downRow[i];});
             //
             //     // Update the Rubik's Cube state
             //     setRubiksCube(newRubiksCubeMatrix);
             //     break;
             // }
+            case 'b': // Front clockwise
+            {
+                // rotate face clockwise
+                // up row 1 reveresed becomes left column 1
+                // left column 1 becomes down row 2
+                // down row 2 reversed becomes right colum 3
+                // right column 3 becomes up row 1
+
+
+
+
+                // Create a deep copy
+                const newRubiksCubeMatrix = {
+                    front: rubiksCubeMatrix.front.map(row => [...row]),
+                    back: rubiksCubeMatrix.back.map(row => [...row]),
+                    left: rubiksCubeMatrix.left.map(row => [...row]),
+                    right: rubiksCubeMatrix.right.map(row => [...row]),
+                    up: rubiksCubeMatrix.up.map(row => [...row]),
+                    down: rubiksCubeMatrix.down.map(row => [...row]),
+                };
+
+                newRubiksCubeMatrix.back = rotateFaceClockwise(newRubiksCubeMatrix.back);
+
+                // Extract correct rows and columns
+                const leftColumn = newRubiksCubeMatrix.left.map(row => row[0]); // Left column 2
+                const upRow = newRubiksCubeMatrix.up[0].reverse();
+                const rightColumn = newRubiksCubeMatrix.right.map(row => row[2]);
+                const downRow = newRubiksCubeMatrix.down[2].reverse();              // Down row 1bbbbbbb
+
+                newRubiksCubeMatrix.up[0] = rightColumn;
+                newRubiksCubeMatrix.right.forEach((row, i) => {row[2] = downRow[i];});
+                newRubiksCubeMatrix.down[2] = leftColumn;
+                newRubiksCubeMatrix.left.forEach((row, i) => {row[2] = upRow[i];});
+
+                // Update the Rubik's Cube state
+                setRubiksCube(newRubiksCubeMatrix);
+                break;
+            }
 
         }
     };
