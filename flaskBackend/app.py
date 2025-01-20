@@ -32,7 +32,6 @@ def algorithm():
 
         print(layout)
         print(solver)
-
         result = processAlgorithm(layout, solver)
 
 

@@ -1,8 +1,8 @@
-testRightCounterclockwise = {
+testResultRightCounterclockwise = {
     "up": [
         ["w", "o", "o"],
-        ["b", "y", "o"],
-        ["y", "r", "y"]
+        ["b", "y", "y"],
+        ["y", "r", "b"]
     ],
     "left": [
 
@@ -11,23 +11,23 @@ testRightCounterclockwise = {
         ["g", "r", "w"]
     ],
     "front": [
-        ["g", "g", "b"],
-        ["o", "r", "g"],
-        ["b", "r", "b"]
+        ["g", "g", "o"],
+        ["o", "r", "o"],
+        ["b", "r", "y"]
     ],
     "right": [
-        ["r", "g", "w"],
         ["w", "g", "g"],
-        ["o", "w", "g"]
+        ["g", "g", "w"],
+        ["r", "w", "o"]
     ],
     "back": [
-        ["b", "w", "g"],
-        ["y", "o", "b"],
-        ["o", "w", "o"]
+        ["w", "w", "g"],
+        ["r", "o", "b"],
+        ["y", "w", "o"]
     ],
     "down": [
-        ["r", "y", "y"],
-        ["b", "w", "r"],
-        ["y", "b", "w"]
+        ["r", "y", "b"],
+        ["b", "w", "g"],
+        ["y", "b", "b"]
     ]
 }

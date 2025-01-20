@@ -10,11 +10,15 @@ const Cube: React.FC = () => {
     const {Moves} = useMoveContext();
     const [currentMove, setCurrentMove]= useState(' ');
 
+
+
+
     useEffect(()=>{
         const setCurrentMove = Moves.Moves[Moves.MoveIndex];
     }, [Moves.MoveIndex])
 
     useEffect(() => {
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 8;
@@ -77,246 +81,243 @@ const Cube: React.FC = () => {
         };
 
         // Rotate a face of the cube
-        const rotateFace = (axis: 'x' | 'y' | 'z', index: number, angle: number) => {
-            const faceCubes = getFaceCubes(axis, index);
+        const rotateFace = (
+            axis: 'x' | 'y' | 'z',
+            index: number,
+            totalAngle: number,
+            duration: number = 1
+        ): Promise<void> => {
+            return new Promise((resolve) => {
+                const faceCubes = getFaceCubes(axis, index);
 
-            // Create a pivot group to rotate the selected cubes
-            const pivot = new THREE.Group();
-            scene.add(pivot);
+                const pivot = new THREE.Group();
+                scene.add(pivot);
 
-            // Attach the cubes to the pivot for rotation
-            faceCubes.forEach(cube => {
-                cubeGroup.remove(cube);
-                pivot.add(cube);
+                faceCubes.forEach((cube) => {
+                    cubeGroup.remove(cube);
+                    pivot.add(cube);
+                });
+
+                const steps = 16; // Number of animation steps
+                const angleIncrement = totalAngle / steps;
+                const interval = duration / steps;
+                let currentStep = 0;
+
+                const animateRotation = () => {
+                    if (currentStep < steps) {
+                        if (axis === 'x') {
+                            pivot.rotation.x += angleIncrement;
+                        } else if (axis === 'y') {
+                            pivot.rotation.y += angleIncrement;
+                        } else if (axis === 'z') {
+                            pivot.rotation.z += angleIncrement;
+                        }
+
+                        renderer.render(scene, camera); // Re-render the scene
+                        currentStep++;
+                        setTimeout(animateRotation, interval);
+                    } else {
+                        // Finalize rotation
+                        pivot.updateMatrixWorld();
+                        faceCubes.forEach((cube) => {
+                            cube.applyMatrix4(pivot.matrixWorld);
+                            pivot.remove(cube);
+                            cubeGroup.add(cube);
+                        });
+
+                        scene.remove(pivot); // Clean up pivot
+                        resolve(); // Resolve the promise
+                    }
+                };
+
+                animateRotation();
             });
-
-            // Rotate the pivot group
-            if (axis === 'x') {
-                pivot.rotation.x += angle;
-            } else if (axis === 'y') {
-                pivot.rotation.y += angle;
-            } else if (axis === 'z') {
-                pivot.rotation.z += angle;
-            }
-
-            // Update the world positions of the cubes after rotation
-            pivot.updateMatrixWorld();
-            faceCubes.forEach(cube => {
-                cube.applyMatrix4(pivot.matrixWorld);
-
-                // Remove from the pivot group
-                pivot.remove(cube);
-
-                // Reattach to the main group
-                cubeGroup.add(cube);
-            });
-
-            // Remove the pivot
-            scene.remove(pivot);
         };
 
+        const moveQueue: { axis: 'x' | 'y' | 'z'; index: number; angle: number }[] = [];
+        let isAnimating = false;
 
-        // User controls
+        const processNextMove = () => {
+            if (moveQueue.length > 0 && !isAnimating) {
+                isAnimating = true; // Set the animation flag
+                const { axis, index, angle } = moveQueue.shift()!;
+                rotateFace(axis, index, angle, 100).then(() => {
+                    isAnimating = false; // Reset the animation flag
+                    processNextMove(); // Process the next move
+                });
+            }
+        };
+
         const handleKeyDown = (event: KeyboardEvent) => {
             switch (event.key) {
-                // Back clockwise
-                // case 'B':
-                //     rotateFace('z', -1, -Math.PI / 2);
-                //     break;
-
-                // Back counterclockwise
+                case 'B':
+                    moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
+                    break;
                 case 'b':
-                    rotateFace('z', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
                     break;
-
-                // Left counterclockwise
-                case 'o':
-                    rotateFace('x', -1, -Math.PI / 2);
+                case 'L':
+                    moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
                     break;
-
-                // Left clockwise
                 case 'l':
-                    rotateFace('x', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
                     break;
-
-                // Right counterclockwise
                 case 'r':
-                    rotateFace('x', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
                     break;
-
-                // case 'R': // Right clockwise
-                //     rotateFace('x', 1, Math.PI / 2);
-                //     break;
-
-                // Top rotate clockwise
+                case 'R':
+                    moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
+                    break;
                 case 'u':
-                    rotateFace('y', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
                     break;
-
-                // Top counterclockwise
                 case 'U':
-                    rotateFace('y', 1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
                     break;
-
-                // Bottom rotate clockwise
                 case 'D':
-                    rotateFace('y', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
                     break;
-
-                // Bottom counterclockwiseSS
                 case 'd':
-                    rotateFace('y', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
                     break;
-                // Front clockwise
                 case 'f':
-                    rotateFace('z', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
                     break;
-                    // Front counterclockwise
-                // case 'F':
-                //     rotateFace('z', 1, Math.PI / 2);
-                //     break;
+                case 'F':
+                    moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
+                    break;
             }
+            processNextMove(); // Start processing the queue
         };
 
-        // Handle custom move events
+
+
+
         const handleMove = (event: CustomEvent) => {
             const { move } = event.detail;
-            console.log('------------------')
-            console.log(move)
+            console.log('------------------');
+            console.log(move);
+
             switch (move) {
-
                 case 'Start':
-
                     break;
+
+                // Single Moves
                 case "B'":
-                    rotateFace('z', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Back counterclockwise
-                case "B":
-                    rotateFace('z', -1, Math.PI / 2);
+                case 'B':
+                    moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
                     break;
 
-                // Left counterclockwise
                 case "L'":
-                    rotateFace('x', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Left clockwise
                 case 'L':
-                    rotateFace('x', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
                     break;
 
-                // Right counterclockwise
                 case "R'":
-                    rotateFace('x', 1, -Math.PI / 2);
+
+                    moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
                     break;
 
-                case 'R': // Right clockwise
-                    rotateFace('x', 1, Math.PI / 2);
+
+                case 'R':
+                    moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
                     break;
 
-                // Top rotate clockwise
                 case 'U':
-                    rotateFace('y', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
                     break;
 
-                // Top counterclockwise
                 case "U'":
-                    rotateFace('y', 1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
                     break;
 
-                // Bottom rotate clockwise
                 case 'D':
-                    rotateFace('y', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Bottom counterclockwises
                 case "D'":
-                    rotateFace('y', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
                     break;
-                // Front clockwise
+
                 case 'F':
-                    rotateFace('z', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
                     break;
-                // Front counterclockwise
+
                 case "F'":
-                    rotateFace('z', 1, Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
                     break;
 
-
-
-                // two moves
+                // Double Moves (e.g., "B'2", "L2")
                 case "B'2":
-                    rotateFace('z', -1, -Math.PI / 2);
-                    rotateFace('z', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Back counterclockwise
-                case "B2":
-                    rotateFace('z', -1, Math.PI / 2);
-                    rotateFace('z', -1, Math.PI / 2);
+                case 'B2':
+                    moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
                     break;
 
-                // Left counterclockwise
                 case "L'2":
-                    rotateFace('x', -1, -Math.PI / 2);
-                    rotateFace('x', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Left clockwise
                 case 'L2':
-                    rotateFace('x', -1, Math.PI / 2);
-                    rotateFace('x', -1, Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
                     break;
 
-                // Right counterclockwise
                 case "R'2":
-                    rotateFace('x', 1, -Math.PI / 2);
-                    rotateFace('x', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
                     break;
 
-                case 'R2': // Right clockwise
-                    rotateFace('x', 1, Math.PI / 2);
-                    rotateFace('x', 1, Math.PI / 2);
+                case 'R2':
+                    moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
                     break;
 
-                // Top rotate clockwise
                 case 'U2':
-                    rotateFace('y', 1, -Math.PI / 2);
-                    rotateFace('y', 1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
                     break;
 
-                // Top counterclockwise
                 case "U'2":
-                    rotateFace('y', 1, Math.PI / 2);
-                    rotateFace('y', 1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
                     break;
 
-                // Bottom rotate clockwise
                 case 'D2':
-                    rotateFace('y', -1, -Math.PI / 2);
-                    rotateFace('y', -1, -Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
                     break;
 
-                // Bottom counterclockwises
                 case "D'2":
-                    rotateFace('y', -1, Math.PI / 2);
-                    rotateFace('y', -1, Math.PI / 2);
-                    break;
-                // Front clockwise
-                case 'F2':
-                    rotateFace('z', 1, -Math.PI / 2);
-                    rotateFace('z', 1, -Math.PI / 2);
-                    break;
-                // Front counterclockwise
-                case "F'2":
-                    rotateFace('z', 1, Math.PI / 2);
-                    rotateFace('z', 1, Math.PI / 2);
+                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
                     break;
 
+                case 'F2':
+                    moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
+                    break;
+
+                case "F'2":
+                    moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
+                    break;
             }
+
+            processNextMove(); // Start processing the queue
         };
+
 
 
         // Move list controls
