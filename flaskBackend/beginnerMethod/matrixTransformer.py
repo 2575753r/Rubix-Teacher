@@ -36,7 +36,6 @@ def rotate_up_clockwise(cube):
 # Rotate the 'down' face clockwise
 def rotate_down_counterclockwise(cube):
     cube = copy.deepcopy(cube)
-    printCube(cube)
     cube['down'] = rotate_face_counterclockwise(cube['down'])
     cube['front'][2], cube['right'][2], cube['back'][2], cube['left'][2] = (
         cube['right'][2],
@@ -49,7 +48,6 @@ def rotate_down_counterclockwise(cube):
 
 # Rotate the 'down' face counterclockwise
 def rotate_down_clockwise(cube):
-    printCube(cube)
     cube = copy.deepcopy(cube)
     cube['down'] = rotate_face_clockwise(cube['down'])
     cube['front'][2], cube['right'][2], cube['back'][2], cube['left'][2] = (
@@ -66,7 +64,7 @@ def rotate_left_clockwise(cube):
     """
     Rotates the 'left' face clockwise and updates the adjacent faces appropriately.
     """
-
+    # Create a deep copy of the cube to prevent unintended modifications
     cube = copy.deepcopy(cube)
 
     # Rotate the left face itself
@@ -131,9 +129,9 @@ def rotate_right_counterclockwise(cube):
 
     # Use temporary variables for the new values
     new_front_col = up_col
-    new_down_col = front_col[::-1]                         # Down gets reversed Front
+    new_down_col = front_col                         # Down gets reversed Front
     new_back_col = down_col[::-1]                          # Back gets reversed Down
-    new_up_col = back_col                                  # Up gets Back directly
+    new_up_col = back_col                         # Up gets Back directly
 
     # Apply the new values
     for i in range(3):
@@ -142,7 +140,6 @@ def rotate_right_counterclockwise(cube):
         cube['back'][2 - i][0] = new_back_col[i]           # Update Back
         cube['up'][i][2] = new_up_col[i]                   # Update Up
 
-    printCube(cube)
     return cube
 
 
@@ -282,6 +279,28 @@ def rotate_back_counterclockwise(cube):
         cube['right'][i][2] = up_row[i]           # Up row → Right column
 
     return cube
+
+def performYmovement(cube):
+    cube = copy.deepcopy(cube)
+
+    # Store original face configurations temporarily
+    original_front = cube['front']
+    original_left = cube['left']
+    original_right = cube['right']
+    original_back = cube['back']
+
+    # Perform the Y movement: reassign faces clockwise
+    cube['front'] = original_right
+    cube['right'] = original_back
+    cube['back'] = original_left
+    cube['left'] = original_front
+
+    # Rotate the up and down faces clockwise
+    cube['up'] = rotate_face_clockwise(cube['up'])
+    cube['down'] = rotate_face_counterclockwise(cube['down'])
+
+    return cube
+
 
 
 

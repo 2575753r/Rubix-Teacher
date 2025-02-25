@@ -1,4 +1,4 @@
-testCaseUpClockwise = {
+testResultUpClockwise = {
 "up": [
         ["y", "b", "w"],
         ["r", "y", "o"],

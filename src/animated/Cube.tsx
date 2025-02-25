@@ -2,6 +2,7 @@ import React, {useRef, useEffect, useState} from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import {MoveContextState, useMoveContext} from "../hooks/MoveContext";
+import {useRubiksCube} from "./RubiksCubeContext";
 
 const Cube: React.FC = () => {
 
@@ -9,9 +10,25 @@ const Cube: React.FC = () => {
     const mountRef = useRef<HTMLDivElement | null>(null);
     const {Moves} = useMoveContext();
     const [currentMove, setCurrentMove]= useState(' ');
+    const { rubiksCube3D } = useRubiksCube();
+    const [localCube3D, setLocalCube3D] = useState(rubiksCube3D);
+    const [cubeY, setCubeRotation] = useState(0); // Tracks Y-axis rotation (0, 90, 180, 270)
 
 
+    // Listen for "cube-3d-update" event and update local state
+    useEffect(() => {
+        const handleCube3DUpdate = (event: Event) => {
+            const newCubeState = (event as CustomEvent).detail;
+            console.log("Received new 3D Cube State:", newCubeState);
+            setLocalCube3D(newCubeState); // Force re-render with updated state
+        };
 
+        window.addEventListener("cube-3d-update", handleCube3DUpdate);
+
+        return () => {
+            window.removeEventListener("cube-3d-update", handleCube3DUpdate);
+        };
+    }, []);
 
     useEffect(()=>{
         const setCurrentMove = Moves.Moves[Moves.MoveIndex];
@@ -23,7 +40,7 @@ const Cube: React.FC = () => {
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 8;
 
-        const renderer = new THREE.WebGLRenderer({antialias: true});
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xadd8e6);
 
@@ -42,33 +59,56 @@ const Cube: React.FC = () => {
 
         const cubes: THREE.Mesh[] = [];
 
-        // Create 27 small cubes to form the Rubik's Cube
+        // Default Rubik's Cube layout (solved state)
+        // Right, Left, Top, Down, Front, Back
+        const defaultCubeState = localCube3D
+
+        // Create 27 small cubes based on the default state
+        let cubeIndex = 0;
+
         for (let x = -1; x <= 1; x++) {
             for (let y = -1; y <= 1; y++) {
                 for (let z = -1; z <= 1; z++) {
                     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
-                    // Assign colors to faces based on position
+                    // Assign colors to faces based on defaultCubeState
+                    const cubeColors = defaultCubeState[cubeIndex];
+
                     const materials = [
-                        // Right face green
-                        new THREE.MeshBasicMaterial({color: x === 1 ? 0x00ff00 : 0x000000}),
-                        // Left face green
-                        new THREE.MeshBasicMaterial({color: x === -1 ? 0x0000ff : 0x000000}),
-                        // Top face yellow
-                        new THREE.MeshBasicMaterial({color: y === 1 ? 0xffff00 : 0x000000}),
-                        // Down face white
-                        new THREE.MeshBasicMaterial({color: y === -1 ? 0xffffff : 0x000000}),
-                        // Front face red
-                        new THREE.MeshBasicMaterial({color: z === 1 ? 0xff0000 : 0x000000}),
-                        // Back face orange
-                        new THREE.MeshBasicMaterial({color: z === -1 ? 0xffa500 : 0x000000}),
+                        new THREE.MeshBasicMaterial({ color: cubeColors[0] ? getColor(cubeColors[0]) : 0x000000 }), // Left
+                        new THREE.MeshBasicMaterial({ color: cubeColors[1] ? getColor(cubeColors[1]) : 0x000000 }), // Right
+                        new THREE.MeshBasicMaterial({ color: cubeColors[2] ? getColor(cubeColors[2]) : 0x000000 }), // Up
+                        new THREE.MeshBasicMaterial({ color: cubeColors[3] ? getColor(cubeColors[3]) : 0x000000 }), // Down
+                        new THREE.MeshBasicMaterial({ color: cubeColors[4] ? getColor(cubeColors[4]) : 0x000000 }), // Front
+                        new THREE.MeshBasicMaterial({ color: cubeColors[5] ? getColor(cubeColors[5]) : 0x000000 }), // Back
                     ];
 
                     const cube = new THREE.Mesh(geometry, materials);
                     cube.position.set(x * offset, y * offset, z * offset);
                     cubeGroup.add(cube);
                     cubes.push(cube);
+
+                    // 🎨 Add a black outline (wireframe)
+                    const edges = new THREE.EdgesGeometry(geometry);
+                    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
+                    const wireframe = new THREE.LineSegments(edges, lineMaterial);
+                    cube.add(wireframe); // Attach wireframe to cube
+
+                    cubeIndex++;
                 }
+            }
+        }
+
+
+        function getColor(face: string) {
+            switch (face) {
+                case 'Y': return 0xffff00; // Yellow
+                case 'W': return 0xffffff; // White
+                case 'B': return 0x0000ff; // Blue
+                case 'G': return 0x00ff00; // Green
+                case 'R': return 0xff0000; // Red
+                case 'O': return 0xffa500; // Orange
+                default: return 0x000000;  // Black (hidden face)
             }
         }
 
@@ -149,46 +189,78 @@ const Cube: React.FC = () => {
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            switch (event.key) {
-                case 'B':
-                    moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
-                    break;
-                case 'b':
-                    moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
-                    break;
-                case 'L':
-                    moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
-                    break;
-                case 'l':
-                    moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
-                    break;
-                case 'r':
-                    moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
-                    break;
-                case 'R':
-                    moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
-                    break;
-                case 'u':
-                    moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
-                    break;
-                case 'U':
-                    moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
-                    break;
-                case 'D':
-                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
-                    break;
-                case 'd':
-                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
-                    break;
-                case 'f':
-                    moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
-                    break;
-                case 'F':
-                    moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
-                    break;
+            let transformedMove = moveTransformer(event.key.toUpperCase()); // Transform move based on rotation
+
+            if (transformedMove === "Y") {
+                // Rotate the entire cube and update Y-rotation state
+                moveQueue.push({ axis: 'y', index: 0, angle: -Math.PI / 2 });
+                moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
+                moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
+                setCubeRotation(prev => (prev + 90) % 360); // Update rotation
+            } else {
+                switch (transformedMove) {
+                    case "B'":
+                        moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
+                        break;
+                    case 'B':
+                        moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
+                        break;
+                    case "L'":
+                        moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
+                        break;
+                    case 'L':
+                        moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
+                        break;
+                    case "R'":
+                        moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
+                        break;
+                    case 'R':
+                        moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
+                        break;
+                    case 'U':
+                        moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
+                        break;
+                    case "U'":
+                        moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
+                        break;
+                    case 'D':
+                        moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
+                        break;
+                    case "D'":
+                        moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
+                        break;
+                    case 'F':
+                        moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
+                        break;
+                    case "F'":
+                        moveQueue.push({ axis: 'z', index: 1, angle: Math.PI / 2 });
+                        break;
+                }
             }
-            processNextMove(); // Start processing the queue
+            processNextMove();
         };
+
+        const moveTransformer = (move: string): string => {
+            // Mapping based on Y-rotation state
+            const moveMappings: Record<number, Record<string, string>> = {
+                0: { R: 'R', L: 'L', F: 'F', B: 'B', U: 'U', D: 'D' },
+                90: { R: 'B', L: 'F', F: 'R', B: 'L', U: 'U', D: 'D' },
+                180: { R: 'L', L: 'R', F: 'B', B: 'F', U: 'U', D: 'D' },
+                270: { R: 'F', L: 'B', F: 'L', B: 'R', U: 'U', D: 'D' },
+            };
+
+            // Extract base move & modifier (e.g., "R'" → base="R", modifier="'")
+            let baseMove = move.replace(/['2]/g, '');
+            let modifier = move.includes("'") ? "'" : move.includes("2") ? "2" : "";
+
+            // Ensure baseMove exists in the mapping before transforming
+            if (moveMappings[cubeY] && moveMappings[cubeY][baseMove]) {
+                baseMove = moveMappings[cubeY][baseMove]; // Map to rotated move
+            }
+
+            return `${baseMove}${modifier}`; // Ensure it returns a valid string
+        };
+
 
 
 
@@ -199,6 +271,11 @@ const Cube: React.FC = () => {
             console.log(move);
 
             switch (move) {
+
+
+
+
+
                 case 'Start':
                     break;
 
@@ -238,11 +315,11 @@ const Cube: React.FC = () => {
                     break;
 
                 case 'D':
-                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
                     break;
 
                 case "D'":
-                    moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
+                    moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
                     break;
 
                 case 'F':
@@ -316,7 +393,7 @@ const Cube: React.FC = () => {
             }
 
             processNextMove(); // Start processing the queue
-        };
+        }
 
 
 
@@ -354,7 +431,7 @@ const Cube: React.FC = () => {
 
         };
 
-    }, []);
+    }, [localCube3D]);
 
     // Listen for MoveIndex changes
 

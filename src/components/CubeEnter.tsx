@@ -1,49 +1,67 @@
 import React, { useState } from 'react';
 import { useRubiksCube } from '../animated/RubiksCubeContext';
+import InfoButton from "./Information"; // Import the InfoButton component
 
 interface CubeEnterProps {
     onClose: () => void;
 }
 
 const CubeEnter: React.FC<CubeEnterProps> = ({ onClose }) => {
-    const { setRubiksCube } = useRubiksCube();
+    const { setRubiksCube, setRubiksCube3DOnly } = useRubiksCube();
     const [cubeString, setCubeString] = useState('');
 
     const handleApply = () => {
         if (cubeString.length !== 54) {
-            alert('Input must be exactly 54 characters.');
+            alert(`Input must be exactly 54 characters. It is currently ${cubeString.length} characters.\n\nCurrent input:\n${cubeString}`);
             return;
         }
 
-        const updatedCube = {
-            up: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(rowIndex * 3, rowIndex * 3 + 3).split('')
-            ),
-            left: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(9 + rowIndex * 3, 9 + rowIndex * 3 + 3).split('')
-            ),
-            front: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(18 + rowIndex * 3, 18 + rowIndex * 3 + 3).split('')
-            ),
-            right: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(27 + rowIndex * 3, 27 + rowIndex * 3 + 3).split('')
-            ),
-            back: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(36 + rowIndex * 3, 36 + rowIndex * 3 + 3).split('')
-            ),
-            down: Array.from({ length: 3 }, (_, rowIndex) =>
-                cubeString.slice(45 + rowIndex * 3, 45 + rowIndex * 3 + 3).split('')
-            ),
+        console.log("Updating cube...");
+
+        // Define a mapping of single-character codes to full color names
+        const colorMap: { [key: string]: string } = {
+            'y': 'yellow',
+            'r': 'red',
+            'g': 'green',
+            'b': 'blue',
+            'o': 'orange',
+            'w': 'white'
         };
 
-        setRubiksCube(updatedCube);
-        onClose(); // Close the popup after applying
-    };
+        // Function to convert shorthand colors to full names
+        const convertFace = (startIndex: number) =>
+            Array.from({ length: 3 }, (_, rowIndex) =>
+                cubeString
+                    .slice(startIndex + rowIndex * 3, startIndex + rowIndex * 3 + 3)
+                    .split('')
+                    .map(char => colorMap[char] || char)
+            );
 
+        // Construct the updated cube with full color names
+        const updatedCube = {
+            up: convertFace(0),
+            left: convertFace(9),
+            front: convertFace(18),
+            right: convertFace(27),
+            back: convertFace(36),
+            down: convertFace(45),
+        };
+
+        console.log("New Cube State:", updatedCube);
+
+        setRubiksCube(updatedCube);
+        setRubiksCube3DOnly();
+        onClose();
+    };
 
     return (
         <div style={styles.overlay}>
             <div style={styles.popup}>
+                {/* ℹ️ Info Button - Appears in Top Right */}
+                <div style={styles.infoButtonWrapper}>
+                    <InfoButton contentKey="cubeEnter" />
+                </div>
+
                 <h2>Enter Cube Configuration</h2>
                 <textarea
                     style={styles.textarea}
@@ -78,12 +96,19 @@ const styles: { [key: string]: React.CSSProperties } = {
         zIndex: 1000,
     },
     popup: {
+        position: 'relative',  // ✅ Ensures Info Button stays inside the popup
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
         width: '400px',
         textAlign: 'center',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+    },
+    infoButtonWrapper: {
+        position: 'absolute',
+        top: '10px',  // ✅ Positioned in top-right corner
+        right: '10px',
+        zIndex: 1001, // ✅ Stays above everything
     },
     textarea: {
         width: '100%',
