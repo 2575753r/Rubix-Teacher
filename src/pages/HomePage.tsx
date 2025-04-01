@@ -4,7 +4,7 @@ import { RubiksCubeProvider } from '../animated/RubiksCubeContext';
 
 import ScrambleButton from "../components/atoms/scrambler";
 import CubeEnter from "../components/CubeEnter";
-import InfoPopup from "../components/Information"; // ✅ Import InfoPopup
+import InfoPopup from "../components/Information";
 import InfoPopupProvider from '../hooks/InfoPopupContext';
 import RubiksCube2D from "../animated/2dCube";
 import {MoveProvider} from "../hooks/MoveContext";
@@ -61,9 +61,10 @@ const HomePage = () => {
 
                 <div style={styles.container}>
                     <div style={styles.bottomText}>
-                        <p>Controls: Use lower case to make a clockwise move and caps for counterclockwise </p>
+                        <p>Controls: To rotate a face clockwise press the key corresponding the first letter of that face name.
+                        Use capitals for counterclockwise</p>
                         <p>Example: <strong>r</strong> (Clockwise) | <strong>R</strong> (Counterclockwise)</p>
-                        <p>Y performs an entire cube clockwise rotation</p>
+                        <p>Y performs an entire cube clockwise rotation so the right face becomes the new front...</p>
                     </div>
 
                     <img src={logo} alt="Logo" style={styles.logo}/>
@@ -117,7 +118,6 @@ const HomePage = () => {
 
                     </div>
 
-                    {/* ✅ Info Buttons Positioned Absolutely Over Components */}
 
                     {/* Render CubeEnter if open */}
                     {isCubeEnterOpen && (

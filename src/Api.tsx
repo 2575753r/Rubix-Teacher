@@ -7,9 +7,11 @@ const showInvalidCubeAlert = () => {
 };
 
 // ✅ Exporting both functions
+const API_BASE_URL = "https://rubix-teacher-5.onrender.com"; // ✅ Use your Render backend URL
+
 export const sendRequest = async (rubiksCubeMatrix: RubiksCubeState, solver: string) => {
     try {
-        const response = await axios.post("http://127.0.0.1:5000/algorithm", {
+        const response = await axios.post(`${API_BASE_URL}/algorithm`, {
             cube_state: rubiksCubeMatrix,
             solver: solver,
         });
@@ -24,15 +26,14 @@ export const sendRequest = async (rubiksCubeMatrix: RubiksCubeState, solver: str
     } catch (error) {
         // @ts-ignore
         console.error("Network error:", error.message);
-        showInvalidCubeAlert(); // Alert user on network failure or invalid response
+        showInvalidCubeAlert();
         return null;
     }
 };
 
-// ✅ Ensure sendRequestInput is exported properly
 export const sendRequestInput = async (rubiksCubeMatrix: RubiksCubeState) => {
     try {
-        const response = await axios.post("http://127.0.0.1:5000/cubeinput", {
+        const response = await axios.post(`${API_BASE_URL}/cubeinput`, {
             cube_state_input: rubiksCubeMatrix,
         });
 
@@ -46,7 +47,7 @@ export const sendRequestInput = async (rubiksCubeMatrix: RubiksCubeState) => {
     } catch (error) {
         // @ts-ignore
         console.error("Network error:", error.message);
-        showInvalidCubeAlert(); // Alert user on network failure or invalid response
+        showInvalidCubeAlert();
         return null;
     }
 };
