@@ -61,7 +61,7 @@ const HomePage = () => {
 
                 <div style={styles.container}>
                     <div style={styles.bottomText}>
-                        <p>Controls: To rotate a face clockwise press the key corresponding the first letter of that face name.
+                        <p>To rotate a face clockwise press the key corresponding the first letter of that face name.
                         Use capitals for counterclockwise</p>
                         <p>Example: <strong>r</strong> (Clockwise) | <strong>R</strong> (Counterclockwise)</p>
                         <p>Y performs an entire cube clockwise rotation so the right face becomes the new front...</p>
@@ -232,24 +232,28 @@ const styles: { [key: string]: React.CSSProperties } = {
         border: '2px solid black',
         width: '200px',
         textAlign: 'center',
+        backgroundColor: 'white',  // ✅ Makes it white
+        color: 'black',            // ✅ Ensures readable text
     },
+
     bottomText: {
         position: 'absolute',
-        bottom: '5px',  // Adjusted to be closer to the bottom edge
+        bottom: '5px',
         left: '50%',
         transform: 'translateX(-50%)',
-        fontSize: '14px',  // Smaller text for compact display
+        fontSize: '14px',
         fontWeight: 'normal',
-        color: '#222',  // Slightly darker text for better contrast
+        color: '#222',
         textAlign: 'center',
-        backgroundColor: '#f9f9f9',  // Softer background color
-        padding: '5px 10px',  // Slightly reduced padding
-        borderRadius: '6px',
-        border: '1px solid #ccc',  // Lighter, thinner border
-        lineHeight: '16px',  // Compact but readable
+        padding: '0',
+        margin: '0',
+        backgroundColor: 'transparent', // fully transparent
+        border: 'none',
+        boxShadow: 'none',
         zIndex: 1000,
-        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)', // Soft shadow for a modern look
     },
+
+
 
 
 
@@ -284,7 +288,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         position: "absolute",
         top: "10px",
         right: "10px",
-        zIndex: 2000, // ✅ Ensures Info Buttons are on Top
+        zIndex: 2000,
         display: "flex",
         flexDirection: "column",
         gap: "10px",

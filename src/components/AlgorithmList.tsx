@@ -1,154 +1,160 @@
-import React, {useEffect, useState} from 'react';
-import Ticket from './atoms/Ticket';
-import {RubiksCubeState, useRubiksCube} from '../animated/RubiksCubeContext';
-import { sendRequest, sendRequestInput } from "../Api";
-import {MoveContextState, useMoveContext} from "../hooks/MoveContext";
-
+import React, { useState } from 'react';
+import { RubiksCubeState, useRubiksCube } from '../animated/RubiksCubeContext';
+import { sendRequest } from "../Api";
+import { MoveContextState, useMoveContext } from "../hooks/MoveContext";
 
 const AlgorithmList: React.FC = () => {
-    const [showDetails, setShowDetails] = useState(true); // Toggle for showing/hiding content
-    const [flashBlue, setFlashBlue] = useState(false); // State to track the flash effect
-    const [currentStep, setCurrentStep] = useState(0); // Tracks the current step displayed
-    const { rubiksCubeMatrix, setRubiksCube } = useRubiksCube();
-    const {Moves, setMoves}= useMoveContext()
-    const [beginner, setShowBeginner] = useState(false);
+    const [showDetails, setShowDetails] = useState(true);
+    const [flashBlue, setFlashBlue] = useState(false);
+    const [currentStep, setCurrentStep] = useState(0);
+    const { rubiksCubeMatrix } = useRubiksCube();
+    const { setMoves } = useMoveContext();
 
     async function beginnerFunction() {
-        setMoves({ Moves: [], MoveIndex: 0 });  // ✅ Clear old list before fetching new moves
-
+        setMoves({ Moves: [], MoveIndex: 0 });
         const result = await sendRequest(rubiksCubeMatrix, "Beginner");
-
         if (result) {
-            setMoves({ Moves: ["Start", ...result], MoveIndex: 0 });  // ✅ Set new list
+            setMoves({ Moves: ["Start", ...result], MoveIndex: 0 });
         }
     }
 
+    const pages = [
+        {
+            title: "Welcome",
+            content: [
+                "Welcome to the Beginner's Guide to Solving the Rubik's Cube!",
+                "In this interactive tutorial, you'll learn how to solve the cube using the Layer-by-Layer (LBL) method, a popular and beginner-friendly approach.",
+                "We’ll guide you through each stage with simple instructions and visual support.",
+                "Here's the sequence you’ll follow:",
+                "1. Make the daisy",
+                "2. Solve the white cross",
+                "3. Insert white corners",
+                "4. Solve the middle layer",
+                "5. Create the yellow cross",
+                "6. Position the yellow edges and corners",
+                "7. Orient yellow corners to finish",
+                "Let’s begin!"
+            ]
+        },
+        {
+            title: "First Layer: Make the Daisy",
+            content: [
+                "The first step is to form a daisy on the top face of the cube (usually the yellow face).",
+                "This pattern consists of four white edge pieces surrounding the yellow center tile, resembling a flower.",
+                "Steps:",
+                "1. Locate white edge pieces anywhere on the cube. These pieces have a white tile and another colored tile.",
+                "2. Use turns to bring each white edge next to the yellow center on the top face.",
+                "3. Avoid moving corner pieces or disrupting white edges you've already placed.",
+                "4. If a piece is flipped or misplaced, reposition it and try again.",
+                "The goal is a complete daisy: yellow center with white edges around it."
+            ]
+        },
+        {
+            title: "First Layer: Solve the White Cross",
+            content: [
+                "Now that the daisy is complete, you’ll convert it into a white cross on the bottom face (white side).",
+                "Each white edge from the daisy must be moved to the bottom, aligning its non-white color with the correct center tile on the side.",
+                "Steps:",
+                "1. Rotate the top layer until the non-white side of a white edge matches the center tile directly beneath it.",
+                "2. Once aligned, rotate that face 180 degrees (a double turn) to move the white edge to the bottom.",
+                "3. Repeat this process for all four edges around the daisy.",
+                "After completing this step, you should see a white cross on the bottom with side colors aligned with their centers."
+            ]
+        },
+        {
+            title: "First Layer: Insert White Corners",
+            content: [
+                "With the white cross in place, the next goal is to solve the rest of the white face by inserting the white corners.",
+                "Each corner piece has three colors and must be positioned between the three corresponding center tiles.",
+                "Steps:",
+                "1. Find a white corner in the top layer—it will include white and two other colors.",
+                "2. Rotate the top face so the corner is above its target position in the bottom layer.",
+                "3. Apply the algorithm R U R' U' until the corner moves into place.",
+                "4. Repeat for each of the four white corners.",
+                "The white face should now be complete and the colors along the bottom row of all adjacent faces should match their centers."
+            ]
+        },
+        {
+            title: "Second Layer: Insert Middle Edges",
+            content: [
+                "The second layer of the cube contains four edge pieces (without yellow) that sit between the corners you've already solved.",
+                "This step moves these edge pieces into their correct positions using algorithms.",
+                "Steps:",
+                "1. Locate an edge piece in the top layer that does not contain yellow.",
+                "2. Match the front-facing color of the edge with the center tile of that face.",
+                "3. Observe whether the edge needs to be inserted to the left or the right:",
+                "   - If to the right: use the algorithm U R U' R' U' F' U F",
+                "   - If to the left: use the algorithm U' L' U L U F U' F'",
+                "4. Execute the appropriate algorithm to move the edge into place.",
+                "Repeat until all middle-layer edges are correctly inserted."
+            ]
+        },
+        {
+            title: "Third Layer: Make the Yellow Cross",
+            content: [
+                "Now begin solving the final layer—the yellow face on top. The first task here is to create a yellow cross by flipping yellow edge tiles to face upward.",
+                "This step is about orientation only, not positioning the pieces.",
+                "Steps:",
+                "1. Examine the top face. You’ll see one of the following:",
+                "   - A single yellow center (dot)",
+                "   - An L-shaped pattern (two yellow edges forming a corner)",
+                "   - A line (two yellow edges in a straight row)",
+                "2. Hold the cube so the pattern is in the correct orientation:",
+                "   - For the L-shape, place it in the top-left corner of the face",
+                "   - For the line, position it horizontally",
+                "3. Use the algorithm: F R U R' U' F'",
+                "4. Repeat the algorithm until you have a full yellow cross (four yellow edge tiles facing up)."
+            ],
+
+        },
+        {
+            title: "Third Layer: Position Yellow Edges",
+            content: [
+                "Although the yellow cross is now on the top face, the yellow edges may still be in the wrong positions.",
+                "The goal here is to rotate the edge pieces around so they match the color of the center tiles on the adjacent sides.",
+                "Steps:",
+                "1. Look at each yellow edge and check whether its side color matches the center tile it touches.",
+                "2. If one or two edges are already correct, hold the cube so the incorrect ones are at the back and left.",
+                "3. Apply the algorithm: U R U' L' U R' U' L",
+                "4. Repeat the algorithm until all four yellow edge pieces are in the correct positions.",
+                "At the end of this step, the yellow edges will still face upward but now correctly match the side center colors."
+            ],
+            image: "// Image: Yellow cross shown with aligned and misaligned edge positions."
+        },
+        {
+            title: "Third Layer: Position Yellow Corners",
+            content: [
+                "Now that the edges are in place, the next task is to position the yellow corner pieces—getting them to the correct location, regardless of orientation.",
+                "A correctly placed corner has the right three colors to match the three adjacent center tiles.",
+                "Steps:",
+                "1. Inspect each corner on the top layer to find one that is already in the correct location (even if twisted).",
+                "2. Hold the cube so this correct corner is at the front-right of the top layer.",
+                "3. Apply the algorithm: U R U' L' U R' U' L",
+                "4. After applying, check if more corners are now in the correct locations.",
+                "5. Repeat as needed until all four corners are positioned correctly."
+            ]
+        },
+        {
+            title: "Third Layer: Orient Yellow Corners",
+            content: [
+                "The final step is to rotate the yellow corners so the yellow stickers are facing upward, completing the yellow face.",
+                "Steps:",
+                "1. Hold the cube so an incorrectly oriented corner is at the front-right of the top layer.",
+                "2. Use the algorithm: R' D' R D repeatedly until the corner is oriented correctly (yellow on top).",
+                "3. Turn only the top face (U) to bring the next unsolved corner into the front-right position.",
+                "4. Repeat for all four corners without turning the whole cube.",
+                "Once all corners are oriented, the cube should be fully solved."
+            ]
+        },
+]
 
     const toggleDetails = () => {
-
-        // Trigger blue flash effect
         setFlashBlue(true);
-        setTimeout(() => setFlashBlue(false), 300); // Reset flash after 300ms
+        setTimeout(() => setFlashBlue(false), 300);
     };
 
-
-
-    const beginnerSteps = [
-        {
-            title: "Step 1: Solve the White Cross",
-            content: `
-The white face will be treated as the bottom face. Your goal is to create a white cross on the bottom face while ensuring the other colors of the edge pieces match the center pieces of the side faces.
-
-Steps:
-1. Locate the white edge pieces (pieces with white on one face).
-2. Align the non-white color of each edge piece with the matching center piece on the side faces.
-3. Rotate the side face 180° to move the white sticker to the bottom face.
-4. Repeat for all four edge pieces.
-
-When finished, the bottom face will have a white cross, and the side colors will align with their centers.
-    `,
-        },
-        {
-            title: "Step 2: Solve the White Corners",
-            content: `
-After completing the white cross, the next step is to position the white corner pieces to complete the white face. Each corner piece has three colors: white and two others.
-
-Steps:
-1. Locate a white corner piece in the top layer.
-2. Align the corner piece above its correct slot on the bottom face by matching the two non-white colors with their respective center pieces.
-3. Use this algorithm repeatedly to move the piece into place: R U R' U'.
-4. Repeat for all four corners.
-
-When finished, the entire white face will be completed, and the bottom layer will align with the centers of the side faces.
-    `,
-        },
-        {
-            title: "Step 3: Solve the Middle Layer Edges",
-            content: `
-Once the first layer is complete, the next step is solving the second layer by placing the edge pieces in the correct positions. Unlike the first layer, this step requires specific algorithms to insert the pieces without disturbing the white face.
-
-To do this, we need to employ our first set of algorithms. But this requires that we understand cube notation. It is simple and easy to understand, with each face being either rotated clockwise or counterclockwise. Move notation follows a simple syntax with the face to be rotated being represented first by it's first letter capitalised, such as 'F' for front, 'B' for back, and so on. Then, the presence of a following apostrophe is used to differentiate between a clockwise or counterclockwise motion. For example, "F" indicates rotating the front face clockwise, whilst "F'" indicates rotating it counterclockwise. This applies to all the different faces.
-
-With this in mind, we can start solving the second layer. Firstly, we find an edge piece in the top layer that is not yellow. Then, we align it with the center of the matching side color. Depending on whether the edge needs to go left or right, we apply one of two algorithms to place it correctly.
-
-If the edge piece needs to move right, we use the following sequence:
-U R U' R' U' F' U F
-
-If the edge piece needs to move left we have the following sequence:
-U' L' U L U F U' F'
-
-We repeat this process for all four edge pieces until the second layer is fully solved. Furthermore, these sequences can also be used to swap misaligned second layer edges in order to move them to the third layer, then position them back to the second layer in the correct orientation.
-
-Beginners often make mistakes in this step, such as misalignment the edge piece before applying the algorithm or accidentally disturbing the first layer. However, with practice and understanding of piece movement, this step becomes easier.
-    `,
-        },
-        {
-            title: "Step 4: Creating the Yellow Cross",
-            content: `
-The first stage involves creating a yellow cross on the up face of the third layer. In order to achieve this, we need to consider the possible different layouts on the up face resulting from the processes of solving the previous layers. With the first and second layer already solved there are a set amount of layouts that are possible in terms of yellow edges on the third layer.
-
-To place the yellow edges into a cross, the same algorithm is applied a number of times depending on the yellow pattern present on the up face 'yellow face'. Each appliance of the algorithm transforms one pattern to the next, but it is necessary to ensure that the algorithm is performed in the correct orientation.
-
-Each figure indicates the exact orientation the cube must be in to apply the algorithm. For example the cube must be rotated in the case that the L shape does not align to the top right of the up face and in the case the line doesn't not stretch from the left to the right of the top face.
-
-Algorithm:
-F R U R' U' F'
-    `,
-        },
-        {
-            title: "Step 5: Positioning the Yellow Edges",
-            content: `
-Even with the yellow cross complete, the edge pieces may not match the colors configured to the side faces. Therefore, the yellow edges may need to be swapped whilst preserving the already solved state of the cube. In order to do this requires two algorithms, one to swap opposite yellow edges and the other to swap adjacent yellow edges until all edges match the colours of the side faces.
-
-Algorithm:
-U R U' L' U R' U' L
-
-With the yellow cross edges correctly orientated, the next step is to position the yellow corner pieces.
-
-This means placing each corner piece in its correct location — that is, the piece should sit between the correct three center colors, even if the yellow sticker is not yet facing upwards. Orientation doesn’t matter at this stage; what matters is that each corner contains the right combination of colors to match the adjacent faces.
-    `,
-        },
-        {
-            title: "Step 6: Positioning the Yellow Corners",
-            content: `
-With the yellow cross made and orientated and with the edges positioned correctly accordingly to the side face colours, we now need to orientate the yellow corners. This stage is about placing them in the correct corner but not requiring that the yellow face of that corner is aligned correctly to the up face. All that is necessary is that each corner contains the right combination of the three colours that corresponds to the adjacent faces.
-
-The algorithm for this stage involves swapping incorrectly placed corners into the right places by swapping them.
-First, we must look for a already correctly placed corner if one exists. Then, from then we apply the below algorithm until all the other corners are swaped and correctly placed.
-
-Algorithm:
-U R U' L' U R' U' L
-
-If no corners are correctly placed initially to this stage then we can perform the algorithm at any position until a corner is correctly orientated before rotating the entire cube to the newly correctly positioned corner and solving normally.
-    `,
-        },
-        {
-            title: "Step 7: Orienting the Yellow Corners",
-            content: `
-The final stage of the third layer is by far the most complex and the place in which many solvers make mistakes. There are a total of seven different possible configurations with each requiring their own alogirithm in order to solve. However, even though there exists many different configurations at this stage the algorithm for each is very similar requiring small alterations.
-
-Each separate figure requires a different algorithm. But each algorithm includes the same repeated sequence of:
-R' D' R D
-
-But the times this is employed and additional rotations of the up face varies with each configuration. By rotating the cube so that it represents one of the figure layouts we can solve each unique one with the following algorithms:
-
-- T shape (Figure 2.11): (R' D' R D) x2 U' (R' D' R D) x4 U
-- T shape (Figure 2.12): (R' D' R D) x4 U' (R' D' R D) x2 U
-- Fish shape (Figure 2.13): (R' D' R D) x2 U (R' D' R D) x2 U2 (R' D' R D) x2 U
-- Fish shape (Figure 2.14): (R' D' R D) x4 U (R' D' R D) x4 U2 (R' D' R D) x4 U
-- Diamond shape (Figure 2.15): U (R' D' R D) x2 U2 (R' D' R D) x4 U
-- Yellow Cross (Figure 2.16): (R' D' R D) x4 U (R' D' R D) x4 U (R' D' R D) x2 U (R' D' R D) x2 U
-- Yellow Cross (Figure 2.17): (R' D' R D) x2 U (R' D' R D) x2 U (R' D' R D) x4 U (R' D' R D) x4 U
-
-Always complete the full R' D' R D sequence — even if the yellow sticker appears correctly placed midway. Only rotate the top face (U) between each step.
-    `},
-
-    ];
-
-
-
     const nextStep = () => {
-        setCurrentStep((prev) => (prev < beginnerSteps.length - 1 ? prev + 1 : prev));
+        setCurrentStep((prev) => (prev < pages.length - 1 ? prev + 1 : prev));
     };
 
     const previousStep = () => {
@@ -164,22 +170,22 @@ Always complete the full R' D' R D sequence — even if the yellow sticker appea
                 }}
                 style={{
                     ...styles.ticket,
-                    backgroundColor: flashBlue ? '#007BFF' : 'white', // Flash effect
+                    backgroundColor: flashBlue ? '#007BFF' : 'white',
                     color: flashBlue ? 'white' : 'black',
-                    transition: 'background-color 0.3s ease-in-out', // Smooth transition effect
+                    transition: 'background-color 0.3s ease-in-out',
                 }}
             >
                 <span>Solve Cube</span>
             </div>
 
-            {/* Pop-Up */}
             {showDetails && (
                 <div style={styles.popup}>
-                    <h2>{beginnerSteps[currentStep].title}</h2>
-                    <p>{beginnerSteps[currentStep].content}</p>
+                    <h2>{pages[currentStep].title}</h2>
+                    {pages[currentStep].content.map((line, index) => (
+                        <p key={index}>{line}</p>
+                    ))}
                     <img
-                        // src={beginnerSteps[currentStep].image}
-                        alt={beginnerSteps[currentStep].title}
+                        alt={pages[currentStep].title}
                         style={{
                             width: '100%',
                             maxWidth: '300px',
@@ -199,10 +205,10 @@ Always complete the full R' D' R D sequence — even if the yellow sticker appea
                             Previous
                         </button>
                         <button
-                            onClick={() => nextStep()}
+                            onClick={nextStep}
                             style={{
                                 ...styles.button,
-                                visibility: currentStep === beginnerSteps.length - 1 ? 'hidden' : 'visible',
+                                visibility: currentStep === pages.length - 1 ? 'hidden' : 'visible',
                             }}
                         >
                             Next
@@ -229,23 +235,20 @@ const styles: { [key: string]: React.CSSProperties } = {
         cursor: 'pointer',
     },
     popup: {
-        position: 'fixed', // ✅ Ensure it is independent of parent divs
+        position: 'fixed',
         top: '38%',
-        right: '10px', // ✅ Stick to the left side
-        transform: 'translateY(-50%)', // ✅ Only center it vertically
-        width: '20vw', // ✅ Make it take up 40% of screen width (adjustable)
-        maxWidth: '500px', // ✅ Set a reasonable maximum width
-        maxHeight: '45vh', // ✅ Prevent it from getting too large
+        right: '10px',
+        transform: 'translateY(-50%)',
+        width: '20vw',
+        maxWidth: '500px',
+        maxHeight: '45vh',
         padding: '20px',
         backgroundColor: 'white',
         borderRadius: '10px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        overflowY: 'auto', // ✅ Allow scrolling if content is too long
-        zIndex: 3000, // ✅ Ensure it is above other elements
+        overflowY: 'auto',
+        zIndex: 3000,
     },
-
-
-
     navigation: {
         display: 'flex',
         justifyContent: 'space-between',

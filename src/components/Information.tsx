@@ -1,10 +1,10 @@
 import React from "react";
-import { useInfoPopup } from "../hooks/InfoPopupContext"; // ✅ Use the global popup
+import { useInfoPopup } from "../hooks/InfoPopupContext";
 import { CSSProperties } from "react";
 
 interface InfoButtonProps {
     contentKey: string;
-    style?: CSSProperties; // ✅ Allow passing custom styles
+    style?: CSSProperties;
 }
 
 const InfoButton: React.FC<InfoButtonProps> = ({ contentKey, style }) => {
@@ -31,7 +31,7 @@ const styles: { [key: string]: CSSProperties } = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 5000, // ✅ Ensures it appears over everything
+        zIndex: 5000,
     }
 };
 
