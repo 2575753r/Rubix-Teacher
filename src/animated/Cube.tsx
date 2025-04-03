@@ -189,47 +189,52 @@ const Cube: React.FC = () => {
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            let transformedMove = moveTransformer(event.key.toUpperCase()); // Transform move based on rotation
+            // Build the move string based on key and shift key
+            let move = event.key.toUpperCase();
+            if (event.shiftKey) {
+                move += "'"; // Shift + key indicates counterclockwise
+            }
+
+            let transformedMove = moveTransformer(move); // Maintain rotation awareness
 
             if (transformedMove === "Y") {
-                // Rotate the entire cube and update Y-rotation state
                 moveQueue.push({ axis: 'y', index: 0, angle: -Math.PI / 2 });
                 moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
                 moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
-                setCubeRotation(prev => (prev + 90) % 360); // Update rotation
+                setCubeRotation(prev => (prev + 90) % 360);
             } else {
                 switch (transformedMove) {
+                    case "B":
+                        moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
+                        break;
                     case "B'":
                         moveQueue.push({ axis: 'z', index: -1, angle: -Math.PI / 2 });
                         break;
-                    case 'B':
-                        moveQueue.push({ axis: 'z', index: -1, angle: Math.PI / 2 });
+                    case "L":
+                        moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
                         break;
                     case "L'":
                         moveQueue.push({ axis: 'x', index: -1, angle: -Math.PI / 2 });
                         break;
-                    case 'L':
-                        moveQueue.push({ axis: 'x', index: -1, angle: Math.PI / 2 });
+                    case "R":
+                        moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
                         break;
                     case "R'":
                         moveQueue.push({ axis: 'x', index: 1, angle: Math.PI / 2 });
                         break;
-                    case 'R':
-                        moveQueue.push({ axis: 'x', index: 1, angle: -Math.PI / 2 });
-                        break;
-                    case 'U':
+                    case "U":
                         moveQueue.push({ axis: 'y', index: 1, angle: -Math.PI / 2 });
                         break;
                     case "U'":
                         moveQueue.push({ axis: 'y', index: 1, angle: Math.PI / 2 });
                         break;
-                    case 'D':
+                    case "D":
                         moveQueue.push({ axis: 'y', index: -1, angle: Math.PI / 2 });
                         break;
                     case "D'":
                         moveQueue.push({ axis: 'y', index: -1, angle: -Math.PI / 2 });
                         break;
-                    case 'F':
+                    case "F":
                         moveQueue.push({ axis: 'z', index: 1, angle: -Math.PI / 2 });
                         break;
                     case "F'":
@@ -237,8 +242,10 @@ const Cube: React.FC = () => {
                         break;
                 }
             }
-            processNextMove();
+
+            processNextMove(); // Ensure animation queue is handled
         };
+
 
         const moveTransformer = (move: string): string => {
             // Mapping based on Y-rotation state
