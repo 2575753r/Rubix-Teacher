@@ -64,7 +64,7 @@ const HomePage = () => {
                         <p>To rotate a face clockwise press the key corresponding the first letter of that face name.
                         Use capitals for counterclockwise</p>
                         <p>Example: <strong>r</strong> (Clockwise) | <strong>R</strong> (Counterclockwise)</p>
-                        <p>Y performs an entire cube clockwise rotation so the right face becomes the new front...</p>
+                        <p>y performs an entire cube clockwise rotation so the right face becomes the new front...</p>
                     </div>
 
                     <img src={logo} alt="Logo" style={styles.logo}/>

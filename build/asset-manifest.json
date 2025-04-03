@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/Rubix-Teacher/static/css/main.f855e6bc.css",
-    "main.js": "/Rubix-Teacher/static/js/main.65db266b.js",
+    "main.js": "/Rubix-Teacher/static/js/main.488b140c.js",
     "static/js/453.ed3810f9.chunk.js": "/Rubix-Teacher/static/js/453.ed3810f9.chunk.js",
     "static/media/HomePageTutorial.png": "/Rubix-Teacher/static/media/HomePageTutorial.5686d67decc1d0016b45.png",
     "static/media/logo.png": "/Rubix-Teacher/static/media/logo.03fa4117fdcf3241d4da.png",
     "static/media/logo.svg": "/Rubix-Teacher/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/Rubix-Teacher/index.html",
     "main.f855e6bc.css.map": "/Rubix-Teacher/static/css/main.f855e6bc.css.map",
-    "main.65db266b.js.map": "/Rubix-Teacher/static/js/main.65db266b.js.map",
+    "main.488b140c.js.map": "/Rubix-Teacher/static/js/main.488b140c.js.map",
     "453.ed3810f9.chunk.js.map": "/Rubix-Teacher/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.65db266b.js"
+    "static/js/main.488b140c.js"
   ]
 }
