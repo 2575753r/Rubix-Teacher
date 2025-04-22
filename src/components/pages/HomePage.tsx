@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import RubiksCube from '../animated/Cube';
-import { RubiksCubeProvider } from '../animated/RubiksCubeContext';
+import React, {useState, useEffect} from 'react';
+import RubiksCube from '../organisms/3dCube';
+import {RubiksCubeProvider} from '../../contexts/CubeContext';
 
-import ScrambleButton from "../components/atoms/scrambler";
-import CubeEnter from "../components/CubeEnter";
-import InfoPopup from "../components/Information";
-import InfoPopupProvider from '../hooks/InfoPopupContext';
-import RubiksCube2D from "../animated/2dCube";
-import {MoveProvider} from "../hooks/MoveContext";
-import MoveList from "../components/MoveList";
-import AlgorithmList from "../components/AlgorithmList";
+import ScrambleButton from "../atoms/scrambler";
+import CubeEnter from "../organisms/CubeEnter";
+import InfoPopup from "../atoms/Information";
+import InfoPopupProvider from '../../contexts/InfoPopupContext';
+import RubiksCube2D from "../organisms/2dCube";
+import {MoveProvider} from "../../contexts/MoveContext";
+import MoveList from "../organisms/MoveList";
+import AlgorithmList from "../organisms/AlgorithmList";
 
-const logo = require('./logo.png');
+const logo = require('../../images/logo.png');
 
 const HomePage = () => {
+
+    // Toggle popup for cube configuration entering feature
     const [isCubeEnterOpen, setIsCubeEnterOpen] = useState(false);
 
+    // Timer handling
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const [timer, setTimer] = useState(0);
     const [pressCount, setPressCount] = useState(0);
 
+    // Timer control, first press - start, second - stop, third - reset
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
         if (isTimerRunning) {
@@ -55,77 +59,78 @@ const HomePage = () => {
     }, [pressCount]);
 
     return (
+        // Encapsulate components within contexts
         <InfoPopupProvider>
-        <RubiksCubeProvider>
-            <MoveProvider>
+            <RubiksCubeProvider>
+                <MoveProvider>
 
-                <div style={styles.container}>
-                    <div style={styles.bottomText}>
-                        <p>To rotate a face clockwise press the key corresponding the first letter of that face name.
-                        Use capitals for counterclockwise</p>
-                        <p>Example: <strong>r</strong> (Clockwise) | <strong>R</strong> (Counterclockwise)</p>
-                        <p>y performs an entire cube clockwise rotation so the right face becomes the new front...</p>
+                    <div style={styles.container}>
+                        <div style={styles.bottomText}>
+                            <p>To rotate a face clockwise press the key corresponding the first letter of that face
+                                name.
+                                Use shift for counterclockwise</p>
+                            <p>Example For Right Face: <strong>r</strong> (Clockwise) | <strong>R</strong> (Counterclockwise)</p>
+                            <p>y performs an entire cube clockwise rotation</p>
+                        </div>
+
+                        <img src={logo} alt="Logo" style={styles.logo}/>
+
+                        <div style={styles.content}>
+                            <div style={styles.leftPanel}>
+
+                                <MoveList/>
+                            </div>
+                            <div style={styles.center}>
+                                <RubiksCube/>
+
+                            </div>
+
+                            <div style={styles.rightPanel}>
+
+                                <AlgorithmList/>
+                            </div>
+                        </div>
+
+                        <div style={styles.timerContainer}>
+                            <button style={styles.timerButton}>Timer</button>
+                            <div style={styles.timerDisplay}>
+                                {Math.floor(timer / 60000)}:{Math.floor((timer % 60000) / 1000).toString().padStart(2, '0')}.
+                                {(timer % 1000).toString().padStart(3, '0')}
+                            </div>
+                        </div>
+
+                        <div style={styles.bottomContainer}>
+
+                            <div style={styles.buttonsContainer}>
+
+                                <ScrambleButton/>
+                                <div><InfoPopup contentKey={""}></InfoPopup></div>
+                            </div>
+
+                            <button
+                                style={styles.longButton}
+                                onClick={() => setIsCubeEnterOpen(true)}
+
+                            >
+
+                                Enter your cube here!
+                            </button>
+
+                            <div style={styles.cube2DContainer}>
+
+                                <RubiksCube2D/>
+
+                            </div>
+
+                        </div>
+
+
+                        {isCubeEnterOpen && (
+                            <CubeEnter onClose={() => setIsCubeEnterOpen(false)}/>
+                        )}
                     </div>
-
-                    <img src={logo} alt="Logo" style={styles.logo}/>
-
-                    <div style={styles.content}>
-                        <div style={styles.leftPanel}>
-
-                            <MoveList/>
-                        </div>
-                        <div style={styles.center}>
-                            <RubiksCube/>
-
-                        </div>
-
-                        <div style={styles.rightPanel}>
-
-                            <AlgorithmList/>
-                        </div>
-                    </div>
-
-                    <div style={styles.timerContainer}>
-                        <button style={styles.timerButton}>Timer</button>
-                        <div style={styles.timerDisplay}>
-                            {Math.floor(timer / 60000)}:{Math.floor((timer % 60000) / 1000).toString().padStart(2, '0')}.
-                            {(timer % 1000).toString().padStart(3, '0')}
-                        </div>
-                    </div>
-
-                    <div style={styles.bottomContainer}>
-
-                        <div style={styles.buttonsContainer}>
-
-                            <ScrambleButton/>
-                            <div><InfoPopup contentKey={""}></InfoPopup></div>
-                        </div>
-
-                        <button
-                            style={styles.longButton}
-                            onClick={() => setIsCubeEnterOpen(true)}
-
-                        >
-
-                            Enter your cube here!
-                        </button>
-
-                        <div style={styles.cube2DContainer}>
-
-                            <RubiksCube2D/>
-
-                        </div>
-
-                    </div>
-
-
-                    {/* Render CubeEnter if open */}
-                    {isCubeEnterOpen && (
-                        <CubeEnter onClose={() => setIsCubeEnterOpen(false)}/>
-                    )}
-                </div>
-            </MoveProvider>
-        </RubiksCubeProvider>
+                </MoveProvider>
+            </RubiksCubeProvider>
         </InfoPopupProvider>
     );
 };
@@ -232,8 +237,8 @@ const styles: { [key: string]: React.CSSProperties } = {
         border: '2px solid black',
         width: '200px',
         textAlign: 'center',
-        backgroundColor: 'white',  // ✅ Makes it white
-        color: 'black',            // ✅ Ensures readable text
+        backgroundColor: 'white',
+        color: 'black',
     },
 
     bottomText: {
@@ -247,14 +252,11 @@ const styles: { [key: string]: React.CSSProperties } = {
         textAlign: 'center',
         padding: '0',
         margin: '0',
-        backgroundColor: 'transparent', // fully transparent
+        backgroundColor: 'transparent',
         border: 'none',
         boxShadow: 'none',
         zIndex: 1000,
     },
-
-
-
 
 
     timerContainer: {

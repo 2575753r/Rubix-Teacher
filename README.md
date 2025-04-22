@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Rubik's Teacher - Description
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An interactive web application designed to teach beginners how to solve the Rubik’s Cube using the layer-by-layer (beginner) method. 
+It combines real-time 3D animations, guided instructions, and algorithm visualization to help users learn step-by-step.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+#  Features
 
-### `npm start`
+- Beginner method algorithm solver
+- Step-by-step solution playback
+- Animated 3D Rubik’s Cube using Three.js
+- Real-time 2D cube view
+- Cube input tool and scrambler
+- Instructional content for each solving stage
+- Keyboard controls and playback navigation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Installation
 
-### `npm test`
+# Prerequisite System Requirements
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (vXX+)
+- Python 3.x
+- Flask
+- npm 
 
-### `npm run build`
+Setup Instructions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Clone the repository
+git clone https://github.com/2575753r/rubiks-teacher.git
+cd rubiks-teacher
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Frontend and backend must be configured seperately
 
-### `npm run eject`
+# Frontend - React
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Open a terminal and cd into the projects root directory 'Rubiks-Teacher'
+cd ../Rubiks-Teacher
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Install front-end dependencies
+npm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Start the React development server
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Backend - Flask
 
-## Learn More
+# In another terminal, cd into the 'flaskBackend' directory with the projects root  and 
+# setup the backend Flask environment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+cd ../Rubiks-Teacher/flaskBackend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Create a virtual environement 
 
-### Code Splitting
+# On macOS/Linux
+python3 -m venv venv
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# On Windows
+python -m venv venv
 
-### Analyzing the Bundle Size
+# Activate it within the terminal
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# On macOS/Linux
+source venv/bin/activate
 
-### Making a Progressive Web App
+# On Windows
+venv\Scripts\activate
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Now install requirements
+pip install -r requirements.txt
 
-### Advanced Configuration
+# After successfull installation, run the flask server using
+flask run
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

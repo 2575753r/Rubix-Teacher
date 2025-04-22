@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useRubiksCube } from '../animated/RubiksCubeContext';
-import InfoButton from "./Information"; // Import the InfoButton component
+import { useRubiksCube } from '../../contexts/CubeContext';
+import InfoButton from "../atoms/Information";
 
 interface CubeEnterProps {
     onClose: () => void;
@@ -10,6 +10,7 @@ const CubeEnter: React.FC<CubeEnterProps> = ({ onClose }) => {
     const { setRubiksCube, setRubiksCube3DOnly } = useRubiksCube();
     const [cubeString, setCubeString] = useState('');
 
+    // Ensure configurations entered conform to the expected length
     const handleApply = () => {
         if (cubeString.length !== 54) {
             alert(`Input must be exactly 54 characters. It is currently ${cubeString.length} characters.\n\nCurrent input:\n${cubeString}`);
@@ -57,7 +58,7 @@ const CubeEnter: React.FC<CubeEnterProps> = ({ onClose }) => {
     return (
         <div style={styles.overlay}>
             <div style={styles.popup}>
-                {/* ℹ️ Info Button - Appears in Top Right */}
+
                 <div style={styles.infoButtonWrapper}>
                     <InfoButton contentKey="cubeEnter" />
                 </div>
@@ -96,7 +97,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         zIndex: 1000,
     },
     popup: {
-        position: 'relative',  // ✅ Ensures Info Button stays inside the popup
+        position: 'relative',
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
@@ -106,9 +107,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     infoButtonWrapper: {
         position: 'absolute',
-        top: '10px',  // ✅ Positioned in top-right corner
+        top: '10px',
         right: '10px',
-        zIndex: 1001, // ✅ Stays above everything
+        zIndex: 1001,
     },
     textarea: {
         width: '100%',

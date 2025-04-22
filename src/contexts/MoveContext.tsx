@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
 
 // Define MoveContextState with Moves defaulting to an empty array
 export interface MoveContextState {
@@ -15,14 +15,14 @@ const MoveContext = createContext<{
 } | null>(null);
 
 // List of possible moves
-const possibleMoves = ['F', 'R', 'L', 'D', 'U', 'B', "F","B", "D", "L", "R"];
+const possibleMoves = ['F', 'R', 'L', 'D', 'U', 'B', "F", "B", "D", "L", "R"];
 
 // Mapping of how moves change with cube rotation
 const faceMapping: Record<number, Record<string, string>> = {
-    0: { F: "F", B: "B", L: "L", R: "R", U: "U", D: "D" },
-    90: { F: "R", B: "L", L: "F", R: "B", U: "U", D: "D" },
-    180: { F: "B", B: "F", L: "R", R: "L", U: "U", D: "D" },
-    270: { F: "L", B: "R", L: "B", R: "F", U: "U", D: "D" },
+    0: {F: "F", B: "B", L: "L", R: "R", U: "U", D: "D"},
+    90: {F: "R", B: "L", L: "F", R: "B", U: "U", D: "D"},
+    180: {F: "B", B: "F", L: "R", R: "L", U: "U", D: "D"},
+    270: {F: "L", B: "R", L: "B", R: "F", U: "U", D: "D"},
 };
 
 // Function to reverse a move
@@ -32,8 +32,8 @@ const reverseMove = (move: string): string => {
     return move + "'"; // "R" → "R'"
 };
 
-export const MoveProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [Moves, setMoves] = useState<MoveContextState>({ Moves: [], MoveIndex: 0 });
+export const MoveProvider: React.FC<{ children: ReactNode }> = ({children}) => {
+    const [Moves, setMoves] = useState<MoveContextState>({Moves: [], MoveIndex: 0});
     const [cubeRotation, setCubeRotation] = useState(0);
     const [prevMoveIndex, setPrevMoveIndex] = useState(0);
 
@@ -49,7 +49,7 @@ export const MoveProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Globally indicate a move change
     const triggerMove = (move: string) => {
         if (!possibleMoves.includes(move.replace("'", "").replace("2", ""))) return;
-        const event = new CustomEvent('cube-move', { detail: { move } });
+        const event = new CustomEvent('cube-move', {detail: {move}});
         window.dispatchEvent(event);
     };
 
@@ -107,7 +107,7 @@ export const MoveProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <MoveContext.Provider value={{ Moves, updateMoveIndex, setMoves, scrambleCube }}>
+        <MoveContext.Provider value={{Moves, updateMoveIndex, setMoves, scrambleCube}}>
             {children}
         </MoveContext.Provider>
     );

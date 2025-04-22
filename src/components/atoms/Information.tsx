@@ -1,5 +1,5 @@
 import React from "react";
-import { useInfoPopup } from "../hooks/InfoPopupContext";
+import { useInfoPopup } from "../../contexts/InfoPopupContext";
 import { CSSProperties } from "react";
 
 interface InfoButtonProps {
@@ -8,7 +8,7 @@ interface InfoButtonProps {
 }
 
 const InfoButton: React.FC<InfoButtonProps> = ({ contentKey, style }) => {
-    const { showPopup } = useInfoPopup(); // ✅ Get the function to trigger popup
+    const { showPopup } = useInfoPopup();
 
     return (
         <button onClick={() => showPopup(contentKey)} style={{ ...styles.button, ...style }}>

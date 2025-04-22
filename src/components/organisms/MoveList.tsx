@@ -1,48 +1,61 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMoveContext } from "../hooks/MoveContext";
-import InfoButton from "./Information"; // ✅ Import your reusable InfoButton component
+import { useMoveContext } from "../../contexts/MoveContext";
+import InfoButton from "../atoms/Information";
 
 const MoveList = () => {
     const { Moves, updateMoveIndex } = useMoveContext();
+
+    // Track current move
     const [index, setIndex] = useState(0);
+
+    // Manage auto traversing state
     const [isResetting, setIsResetting] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    // Access DOM to manage scrolling intervals
     const scrollerRef = useRef<HTMLDivElement | null>(null);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const isPlayingRef = useRef(false);
-    const movesPerPage = 10;
+    const movesPerPage = 10; // Max move tickets per page
 
+    // Detect move list change and set initial states
     useEffect(() => {
         setIsResetting(true);
         setIndex(0);
         setTimeout(() => setIsResetting(false), 100);
     }, [Moves.Moves]);
 
+    // Update move index in shared context
     useEffect(() => {
         if (!isResetting && Moves.Moves.length > 0) {
             updateMoveIndex(index);
         }
     }, [index, Moves.Moves, updateMoveIndex, isResetting]);
 
+    // Utility functions to change current move in list
     const previous = () => {
         setIndex((prev) => Math.max(prev - 1, 0));
     };
-
     const next = () => {
         setIndex((prev) => Math.min(prev + 1, Moves.Moves.length - 1));
     };
 
+    // Automatic playback toggle
     const togglePlay = () => {
         setIsPlaying((prev) => {
             const newPlayingState = !prev;
             isPlayingRef.current = newPlayingState;
 
             if (newPlayingState) {
+
+                // See if its currently running, if so return
                 if (intervalRef.current) return newPlayingState;
 
+                // Starting interval to traverse moves
                 intervalRef.current = setInterval(() => {
                     setIndex((prev) => {
                         if (!isPlayingRef.current) {
+                            // If playback paused, stop
                             clearInterval(intervalRef.current as NodeJS.Timeout);
                             intervalRef.current = null;
                             return prev;
@@ -50,6 +63,7 @@ const MoveList = () => {
                         if (prev < Moves.Moves.length - 1) {
                             return prev + 1;
                         } else {
+                            // If at the end of the move list stop
                             clearInterval(intervalRef.current as NodeJS.Timeout);
                             intervalRef.current = null;
                             isPlayingRef.current = false;
@@ -57,8 +71,9 @@ const MoveList = () => {
                             return prev;
                         }
                     });
-                }, 1000);
+                }, 1000); // Single second delay for smoothness
             } else {
+                // If toggling off, stop
                 if (intervalRef.current) {
                     clearInterval(intervalRef.current);
                     intervalRef.current = null;
@@ -69,6 +84,7 @@ const MoveList = () => {
         });
     };
 
+    // Cleanup on component unmounting
     useEffect(() => {
         return () => {
             if (intervalRef.current) {
@@ -79,10 +95,10 @@ const MoveList = () => {
 
     return (
         <div style={{ textAlign: "center", padding: "20px", position: "relative" }}>
-            {/* ℹ️ Info Button - Top Left */}
+
             <InfoButton contentKey="solveCube" style={styles.infoButton} />
 
-            {/* ▶ Play/Pause Button - Top Right */}
+
             <button
                 onClick={togglePlay}
                 style={styles.playButton}
@@ -116,7 +132,6 @@ const MoveList = () => {
     );
 };
 
-// ✅ Styling for MoveList
 const styles: { [key: string]: React.CSSProperties } = {
     infoButton: {
         position: "absolute",
@@ -133,7 +148,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 1000, // ✅ Ensures it appears above everything
+        zIndex: 1000,
     },
     playButton: {
         position: "absolute",

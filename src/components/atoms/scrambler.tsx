@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {useMoveContext} from "../../hooks/MoveContext";
+import {useMoveContext} from "../../contexts/MoveContext";
 
 const ScrambleButton: React.FC = () => {
     const { scrambleCube } = useMoveContext();
 
     const handleClick = () => {
-        scrambleCube(); // Trigger scramble effect
+        scrambleCube(); // Trigger scramble effect from context
     };
 
     const styles = {

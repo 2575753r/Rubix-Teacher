@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { RubiksCubeState, useRubiksCube } from '../animated/RubiksCubeContext';
-import { sendRequest } from "../Api";
-import { MoveContextState, useMoveContext } from "../hooks/MoveContext";
+import { RubiksCubeState, useRubiksCube } from '../../contexts/CubeContext';
+import { sendRequest } from "../../Api";
+import { MoveContextState, useMoveContext } from "../../contexts/MoveContext";
 
 const AlgorithmList: React.FC = () => {
     const [showDetails, setShowDetails] = useState(true);
@@ -10,6 +10,7 @@ const AlgorithmList: React.FC = () => {
     const { rubiksCubeMatrix } = useRubiksCube();
     const { setMoves } = useMoveContext();
 
+    // Use API to pass configuration and await response
     async function beginnerFunction() {
         setMoves({ Moves: [], MoveIndex: 0 });
         const result = await sendRequest(rubiksCubeMatrix, "Beginner");
@@ -18,6 +19,7 @@ const AlgorithmList: React.FC = () => {
         }
     }
 
+    // Instruction pages individual contents
     const pages = [
         {
             title: "Welcome",
@@ -148,6 +150,7 @@ const AlgorithmList: React.FC = () => {
         },
 ]
 
+    // Functions to allow traversal of instruction manual
     const toggleDetails = () => {
         setFlashBlue(true);
         setTimeout(() => setFlashBlue(false), 300);

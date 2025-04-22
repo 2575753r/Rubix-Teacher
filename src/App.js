@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import HomePage from './pages/HomePage.tsx';
+import HomePage from './components/pages/HomePage.tsx';
 
 function App() {
   return (

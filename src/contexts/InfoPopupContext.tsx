@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, {createContext, useState, useContext} from "react";
 import ReactDOM from "react-dom";
 
 interface InfoPopupContextType {
@@ -22,13 +22,13 @@ const contentMap: Record<string, { title: string; text: string; image?: string }
         text: "Move contexts regarding any algorithm follows a simple universal definition. Each letter corresponds to " +
             "a move made onto the cube. They work as follows: " +
             "All moves with an apostrophe indicate counterclockwise motions, whilst all moves without indicate clockwise" +
-            "motions like so" +
-            "F - Front Clockwise, F' - Front Counterclockwise" +
-            "L - Left Clockwise, L' - Left Counterclockwise" +
-            "R - Right Clockwise, R' - Right Counterclockwise" +
-            "U - Up Clockwise, U' - Up Counterclockwise" +
-            "D - Down Clockwise, D' - Down Counterclockwise" +
-            "B - Back Clockwise, B' - Back Counterclockwise" +
+            "motions like so " +
+            "F - Front Clockwise, F' - Front Counterclockwise " +
+            "L - Left Clockwise, L' - Left Counterclockwise " +
+            "R - Right Clockwise, R' - Right Counterclockwise " +
+            "U - Up Clockwise, U' - Up Counterclockwise " +
+            "D - Down Clockwise, D' - Down Counterclockwise " +
+            "B - Back Clockwise, B' - Back Counterclockwise " +
             "Finally we have the Y move, this indicates rotating the entire cube clockwise so that the front face becomes the left face and the right face becomes the front and so on",
     },
     "cubeEnter": {
@@ -36,21 +36,22 @@ const contentMap: Record<string, { title: string; text: string; image?: string }
         text: "To enter your cube type a character indicating the colours of each block on each face. Rotate to look at that face" +
             "then type either y for yellow, o for orange, b for blue, r for red, g for green and w for white." +
             "Start with the faces in the order up - yellow, left - blue, front - red, right - green, back - orange, " +
-            "down - white." +
+            "down - white. " +
             "Look at those cubes and enter a single character for the colour starting from the top left and ending with the" +
-            "bottom right. For example a face could be yobwbbroy with 9 for each colour then the final layout could be something like: " +
-            "yobwbbroyyobwbbroyyobwbbroyyobwbbroyyobwbbroyyobwbbroy"
+            "bottom right. For example a face could be yobwbbroy with 9 for each colour. " +
+            "See the image below depicting the order:",
+        image: require('../images/CubeEnter.png'),
     },
     "default": {
         title: "Page Tutorial",
         text: "Welcome to Rubick's, Teacher. A simple app to help you understand and solve your rubicks cube! Its recommended that " +
             "you first investigate the information tabs to get a good feel of the tools you'll need to use in order to get going!" +
             " They are around the page like so.",
-        image: require('../components/atoms/stage1Images/HomePageTutorial.png'),
+        image: require('../images/HomePageTutorial.png'),
     }
 };
 
-export const InfoPopupProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const InfoPopupProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [contentKey, setContentKey] = useState<string>("default");
 
@@ -64,7 +65,7 @@ export const InfoPopupProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     return (
-        <InfoPopupContext.Provider value={{ showPopup, hidePopup }}>
+        <InfoPopupContext.Provider value={{showPopup, hidePopup}}>
             {children}
 
             {isOpen &&
@@ -80,17 +81,17 @@ export const InfoPopupProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                                     alt="Tutorial"
                                     style={{
                                         width: "100%",
-                                        maxWidth: "500px",  // ✅ Restrict max width
-                                        height: "auto",      // ✅ Maintain aspect ratio
+                                        maxWidth: "500px",
+                                        height: "auto",
                                         borderRadius: "10px",
                                         marginTop: "10px",
-                                        objectFit: "contain" // ✅ Prevent cropping
+                                        objectFit: "contain"
                                     }}
                                 />
                             )}
                         </div>
                     </div>,
-                    document.body // ✅ Popup is outside any component's structure
+                    document.body
                 )}
         </InfoPopupContext.Provider>
     );
@@ -115,8 +116,8 @@ const styles: { [key: string]: React.CSSProperties } = {
         borderRadius: "10px",
         width: "80%",
         maxWidth: "600px",
-        maxHeight: "75vh",   // ✅ Prevent it from becoming too large
-        overflowY: "auto",   // ✅ Enable scrolling
+        maxHeight: "75vh",
+        overflowY: "auto",
         textAlign: "center",
         position: "relative",
     },
