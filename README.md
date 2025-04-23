@@ -30,7 +30,7 @@ Setup Instructions
 
 
 # Clone the repository
-git clone https://github.com/2575753r/rubiks-teacher.git
+git clone https://github.com/2575753r/rubix-teacher.git
 cd rubiks-teacher
 
 # Frontend and backend must be configured seperately
